@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MAPSTONE REAL ESTATE BROKERAGE L.L.C</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Importing Tex Gyre Termes via CDN -->
+    <link href="https://fonts.cdnfonts.com/css/tex-gyre-termes" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              gold: {
+                400: '#e9b14f', // Updated to new lighter gold
+                500: '#d4a045', 
+                600: '#bf8f3b', 
+              },
+              luxury: {
+                black: '#000000',
+                darkRed: '#4a0404',
+                offWhite: '#f5f5f5',
+                charcoal: '#121212'
+              }
+            },
+            fontFamily: {
+              header: ['"Tex Gyre Termes"', 'serif'],
+              subtitle: ['Georgia', 'serif'],
+              body: ['"Times New Roman"', 'serif'],
+            },
+            backgroundImage: {
+              'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+            },
+            animation: {
+              'spin-slow': 'spin 4s linear infinite',
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+      body {
+        background-color: #000000;
+        color: #f5f5f5;
+        overflow-x: hidden;
+      }
+      
+      /* Custom Scrollbar */
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #121212; 
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #e9b14f; 
+        border-radius: 4px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #d4a045; 
+      }
+
+      /* Gold Rotating Border Effect */
+      .gold-border-btn {
+        position: relative;
+        overflow: hidden;
+        border-radius: 0.25rem;
+        transition: transform 0.3s ease;
+      }
+      
+      .gold-border-btn::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 300%;
+        height: 300%;
+        background: conic-gradient(transparent, transparent, transparent, #e9b14f);
+        animation: rotate 4s linear infinite;
+        transform: translate(-50%, -50%);
+        z-index: 0;
+      }
+      
+      .gold-border-btn::after {
+        content: '';
+        position: absolute;
+        inset: 2px; /* Border width */
+        background: #000000; /* Button bg color matches luxury-black */
+        z-index: 1;
+        border-radius: 0.15rem;
+      }
+
+      .gold-border-btn > span {
+        position: relative;
+        z-index: 2;
+      }
+
+      @keyframes rotate {
+        0% { transform: translate(-50%, -50%) rotate(0deg); }
+        100% { transform: translate(-50%, -50%) rotate(360deg); }
+      }
+
+      /* Smooth Scroll behavior */
+      html {
+        scroll-behavior: smooth;
+      }
+    </style>
+
+<link rel="stylesheet" href="/index.css">
+  <script type="importmap">
+{
+  "imports": {
+    "react/": "https://esm.sh/react@^19.2.3/",
+    "react": "https://esm.sh/react@^19.2.3",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "recharts": "https://esm.sh/recharts@^3.6.0",
+    "framer-motion": "https://esm.sh/framer-motion@^12.23.26",
+    "lucide-react": "https://esm.sh/lucide-react@^0.562.0"
+  }
+}
+</script>
+  <script type="module" crossorigin src="/mapstone.real/assets/index-DrYraKgQ.js"></script>
+</head>
+  <body>
+    <div id="root"></div>
+</body>
+</html>
