@@ -4,7 +4,8 @@ import Hero from './components/Hero';
 import About from './components/About';
 import DubaiLifestyle from './components/DubaiLifestyle';
 import Services from './components/Services';
-import InvestmentStrategy from './components/InvestmentStrategy';
+// Updated the import below
+import WealthArchitecture from './components/WealthArchitecture';
 import RealEstate from './components/RealEstate';
 import MarketUpdate from './components/MarketUpdate';
 import Contact from './components/Contact';
@@ -21,7 +22,8 @@ function App() {
         <About />
         <DubaiLifestyle />
         <Services />
-        <InvestmentStrategy />
+        {/* Updated the component usage below */}
+        <WealthArchitecture />
         <RealEstate />
         <MarketUpdate />
         <Contact />
