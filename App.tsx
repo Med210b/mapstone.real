@@ -1,7 +1,7 @@
 import React from 'react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
-import Partners from './components/Partners'; // Moved up
+import Partners from './components/Partners'; 
 import About from './components/About';
 import DubaiLifestyle from './components/DubaiLifestyle';
 import Services from './components/Services';
@@ -17,13 +17,15 @@ import VideoControl from './components/VideoControl';
 function App() {
   return (
     <VideoProvider>
-      <div className="bg-gray-50 font-sans selection:bg-gold-400 selection:text-black">
+      {/* FIXED: Added 'overflow-x-hidden' to crop the page perfectly for mobile.
+          Added 'relative w-full' to ensure proper alignment on small screens.
+      */}
+      <div className="bg-black font-sans selection:bg-[#D4AF37] selection:text-black overflow-x-hidden relative w-full">
         <Navbar />
+        
+        {/* Main Content Sections */}
         <Hero />
-        
-        {/* Partners is now sitting exactly after the Home/Hero page */}
         <Partners /> 
-        
         <About />
         <DubaiLifestyle />
         <Services />
@@ -32,6 +34,7 @@ function App() {
         <FeaturedDevelopments />
         <MarketUpdate />
         <Contact />
+        
         <Footer />
         <VideoControl />
       </div>
