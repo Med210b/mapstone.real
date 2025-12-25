@@ -1,14 +1,14 @@
 import React from 'react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
+import Partners from './components/Partners'; // Moved up
 import About from './components/About';
 import DubaiLifestyle from './components/DubaiLifestyle';
 import Services from './components/Services';
 import WealthArchitecture from './components/WealthArchitecture';
 import RealEstate from './components/RealEstate';
-import FeaturedDevelopments from './components/FeaturedDevelopments'; // <--- NEW IMPORT
+import FeaturedDevelopments from './components/FeaturedDevelopments';
 import MarketUpdate from './components/MarketUpdate';
-import Partners from './components/Partners'; // <--- NEW IMPORT
 import Contact from './components/Contact';
 import Footer from './components/Footer';
 import { VideoProvider } from './components/VideoContext';
@@ -20,20 +20,17 @@ function App() {
       <div className="bg-gray-50 font-sans selection:bg-gold-400 selection:text-black">
         <Navbar />
         <Hero />
+        
+        {/* Partners is now sitting exactly after the Home/Hero page */}
+        <Partners /> 
+        
         <About />
         <DubaiLifestyle />
         <Services />
         <WealthArchitecture />
         <RealEstate />
-        
-        {/* Added Featured Developments here */}
         <FeaturedDevelopments />
-        
         <MarketUpdate />
-        
-        {/* Added Partners section here (before Contact) */}
-        <Partners />
-        
         <Contact />
         <Footer />
         <VideoControl />

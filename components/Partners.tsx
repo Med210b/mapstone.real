@@ -1,4 +1,6 @@
 import React from 'react';
+// Import the background effect component
+import BackgroundEffect from './BackgroundEffect';
 
 const partners = [
   { name: "DAMAC Properties", logo: "https://i.postimg.cc/DJ7MW0zK/Damac-logo-svg.png" },
@@ -14,8 +16,15 @@ const partners = [
 ];
 
 const Partners: React.FC = () => {
+  // Matches the red color from WealthArchitecture
+  const architectureRed = "#8B2020";
+
   return (
     <section className="min-h-screen bg-black py-12 px-4 sm:py-16 sm:px-6 lg:px-8 border-b border-[#d49842]/30 overflow-hidden relative">
+      
+      {/* 3D Line Effects - Layered in the background with red color */}
+      <BackgroundEffect color={architectureRed} opacity={0.12} />
+
       <style>{`
         @keyframes orbit3d {
           0% { transform: rotateY(0deg) translateZ(450px) rotateY(0deg); }
@@ -74,12 +83,14 @@ const Partners: React.FC = () => {
           z-index: 10;
         }
       `}</style>
+
       <div className="max-w-7xl mx-auto relative z-10">
         <div className="text-center mb-12 sm:mb-16">
           <h2 className="text-lg sm:text-xl md:text-2xl tracking-widest mb-4 sm:mb-6 text-[#d49842] font-subtitle uppercase">Our Partners</h2>
           <div className="flex items-center justify-center mb-4 sm:mb-6"><div className="h-px w-12 sm:w-16 bg-[#d49842]" /></div>
           <h1 className="text-xl sm:text-2xl md:text-4xl lg:text-5xl font-bold text-white font-header">Building Excellence Together</h1>
         </div>
+
         <div className="relative h-[400px] sm:h-[500px] lg:h-[600px] flex items-center justify-center my-8 sm:my-12 lg:my-16">
           <div className="carousel-3d">
             {partners.map((partner, index) => (
@@ -95,4 +106,5 @@ const Partners: React.FC = () => {
     </section>
   );
 };
+
 export default Partners;
