@@ -2,6 +2,8 @@ import React, { useRef, createContext, useState, useContext, useEffect } from 'r
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
+// Import the background animation to match Wealth Architecture
+import BackgroundEffect from './BackgroundEffect'; 
 
 // --- INTERNAL UTILS ---
 function cn(...inputs: ClassValue[]) {
@@ -87,9 +89,9 @@ const StickySection: React.FC<{ title: string; number: string; children: React.R
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
-            className="flex items-baseline gap-4 border-b border-gold-400/30 pb-4"
+            className="flex items-baseline gap-4 border-b border-[#D4AF37]/30 pb-4"
           >
-            <span className="font-subtitle text-gold-400 text-sm tracking-widest">{number}</span>
+            <span className="font-subtitle text-[#D4AF37] text-sm tracking-widest">{number}</span>
             <h2 className="font-header text-4xl md:text-5xl text-white uppercase tracking-tight">{title}</h2>
           </motion.div>
         </div>
@@ -108,29 +110,36 @@ const About: React.FC = () => {
   const yLines = useTransform(scrollYProgress, [0, 1], [0, -250]);
 
   return (
-    <section id="about" ref={containerRef} className="relative bg-luxury-black text-white py-32 overflow-hidden min-h-screen border-b border-gold-400/30">
+    <section id="about" ref={containerRef} className="relative bg-black text-white py-32 overflow-hidden min-h-screen border-b border-[#D4AF37]/30">
+      
+      {/* 1. NEW: Floating Lines Animation (Added to match Wealth Architecture) */}
+      <BackgroundEffect opacity={0.07} color="#D4AF37" />
+
+      {/* 2. Original Image Background (Preserved) */}
       <motion.div style={{ y: yBackground }} className="absolute top-[-10%] right-0 w-3/4 h-[120%] opacity-[0.04] pointer-events-none z-0">
          <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=1000&auto=format&fit=crop" alt="Architecture Background" className="w-full h-full object-cover grayscale" />
-         <div className="absolute inset-0 bg-gradient-to-l from-transparent to-luxury-black" />
+         <div className="absolute inset-0 bg-gradient-to-l from-transparent to-black" />
       </motion.div>
+
+      {/* 3. Original Decorative Lines (Preserved) */}
       <motion.div style={{ y: yLines }} className="absolute left-10 top-[-20%] w-[1px] h-[150%] bg-white/5 z-0" />
-      <motion.div style={{ y: yLines, x: 20 }} className="absolute left-10 top-[-10%] w-[1px] h-[150%] bg-gold-400/10 z-0" />
+      <motion.div style={{ y: yLines, x: 20 }} className="absolute left-10 top-[-10%] w-[1px] h-[150%] bg-[#D4AF37]/10 z-0" />
       
       <div className="container mx-auto px-6 relative z-10">
         <div className="mb-40 md:pl-20 max-w-5xl">
-          <StaggeredText className="font-subtitle text-gold-400 text-sm tracking-[0.3em] uppercase mb-8">Who We Are</StaggeredText>
+          <StaggeredText className="font-subtitle text-[#D4AF37] text-sm tracking-[0.3em] uppercase mb-8">Who We Are</StaggeredText>
           <h1 className="font-header text-5xl md:text-7xl lg:text-8xl leading-[0.9] text-white">
             <StaggeredText delay={0.1}>Architects of</StaggeredText>
             <StaggeredText delay={0.2} className="text-gray-500">Lifestyle.</StaggeredText>
             <StaggeredText delay={0.3}>Curators of</StaggeredText>
-            <StaggeredText delay={0.4} className="text-gold-400 italic font-serif">Legacy.</StaggeredText>
+            <StaggeredText delay={0.4} className="text-[#D4AF37] italic font-serif">Legacy.</StaggeredText>
           </h1>
         </div>
 
-        {/* Section 1: The Vision (UPDATED IMAGE: "Economic Freedom") */}
+        {/* Section 1: The Vision */}
         <StickySection title="The Vision" number="01">
           <CardContainer className="inter-var mb-8">
-            <CardBody className="bg-black/40 relative group/card border-white/10 w-full h-auto rounded-xl p-6 border hover:border-gold-400/50 transition-colors duration-500">
+            <CardBody className="bg-black/40 relative group/card border-white/10 w-full h-auto rounded-xl p-6 border hover:border-[#D4AF37]/50 transition-colors duration-500">
               <CardItem translateZ="50" className="w-full mb-6">
                 <img 
                   src="https://kadibusiness.com/wp-content/uploads/2024/02/Dubai-Economy-and-Tourism.jpg" 
@@ -149,17 +158,17 @@ const About: React.FC = () => {
         {/* Section 2: Methodology */}
         <StickySection title="Methodology" number="02">
           <CardContainer className="inter-var">
-            <CardBody className="bg-black/40 relative group/card border-white/10 w-full h-auto rounded-xl p-6 border hover:border-gold-400/50">
+            <CardBody className="bg-black/40 relative group/card border-white/10 w-full h-auto rounded-xl p-6 border hover:border-[#D4AF37]/50">
               <CardItem translateZ="80" className="w-full mt-4">
                 <img src="https://i.postimg.cc/76ctw2Kg/66.jpg" alt="Luxury Interior" className="h-60 w-full object-cover rounded-xl group-hover/card:shadow-xl grayscale group-hover/card:grayscale-0 transition-all duration-500" />
               </CardItem>
               <div className="flex flex-col md:flex-row gap-6 mt-8">
                 <div>
-                  <CardItem translateZ="50" className="text-xl font-header text-gold-400 mb-2">Precision</CardItem>
+                  <CardItem translateZ="50" className="text-xl font-header text-[#D4AF37] mb-2">Precision</CardItem>
                   <CardItem translateZ="40" className="text-gray-400 text-sm">Data is our currency. We utilize proprietary market intelligence to identify shifts before they occur.</CardItem>
                 </div>
                 <div>
-                  <CardItem translateZ="50" className="text-xl font-header text-gold-400 mb-2">Discretion</CardItem>
+                  <CardItem translateZ="50" className="text-xl font-header text-[#D4AF37] mb-2">Discretion</CardItem>
                   <CardItem translateZ="40" className="text-gray-400 text-sm">Privacy is the ultimate luxury. Our off-market division handles sensitive acquisitions with absolute confidentiality.</CardItem>
                 </div>
               </div>
@@ -170,9 +179,9 @@ const About: React.FC = () => {
         {/* Section 3: The Standard */}
         <StickySection title="The Standard" number="03">
           <CardContainer className="inter-var">
-            <CardBody className="bg-gradient-to-br from-black to-gray-900 relative group/card border-gold-400/20 w-full h-auto rounded-xl p-8 border hover:shadow-2xl hover:shadow-gold-400/10">
+            <CardBody className="bg-gradient-to-br from-black to-gray-900 relative group/card border-[#D4AF37]/20 w-full h-auto rounded-xl p-8 border hover:shadow-2xl hover:shadow-[#D4AF37]/10">
               <CardItem translateZ="40" className="w-full flex justify-center mb-6">
-                 <div className="w-16 h-16 rounded-full border border-gold-400 flex items-center justify-center"><span className="font-serif text-gold-400 text-2xl">M</span></div>
+                 <div className="w-16 h-16 rounded-full border border-[#D4AF37] flex items-center justify-center"><span className="font-serif text-[#D4AF37] text-2xl">M</span></div>
               </CardItem>
               <CardItem translateZ="60" className="font-header text-3xl md:text-4xl text-white leading-tight text-center">
                 "MAPSTONE is not for everyone. It is for those who demand the exceptional as a baseline."
@@ -181,10 +190,10 @@ const About: React.FC = () => {
           </CardContainer>
         </StickySection>
 
-        {/* Section 4: Connectivity (UPDATED IMAGE: "Global Connectivity") */}
+        {/* Section 4: Connectivity */}
         <StickySection title="Connectivity" number="04">
           <CardContainer className="inter-var">
-             <CardBody className="bg-black/40 relative group/card border-white/10 w-full h-auto rounded-xl p-6 border hover:border-gold-400/50">
+             <CardBody className="bg-black/40 relative group/card border-white/10 w-full h-auto rounded-xl p-6 border hover:border-[#D4AF37]/50">
                 <CardItem translateZ="100" className="w-full">
                   <img 
                     src="https://www.caterermiddleeast.com/cloud/2022/02/26/dubai-tourism-news-2021.jpg" 
