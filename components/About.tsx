@@ -1,14 +1,75 @@
-import React, { useRef } from 'react';
+import React, { useRef, createContext, useState, useContext, useEffect } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
+import { type ClassValue, clsx } from "clsx";
+import { twMerge } from "tailwind-merge";
 
-// Helper component for Staggered Text Reveal
+// --- INTERNAL UTILS ---
+function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
+
+// --- 3D CARD COMPONENTS (Built-in) ---
+const MouseEnterContext = createContext<[boolean, React.Dispatch<React.SetStateAction<boolean>>] | undefined>(undefined);
+
+const CardContainer = ({ children, className, containerClassName }: { children?: React.ReactNode; className?: string; containerClassName?: string }) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [isMouseEntered, setIsMouseEntered] = useState(false);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!containerRef.current) return;
+    const { left, top, width, height } = containerRef.current.getBoundingClientRect();
+    const x = (e.clientX - left - width / 2) / 25;
+    const y = (e.clientY - top - height / 2) / 25;
+    containerRef.current.style.transform = `rotateY(${x}deg) rotateX(${y}deg)`;
+  };
+
+  const handleMouseEnter = () => { setIsMouseEntered(true); };
+  const handleMouseLeave = () => {
+    if (!containerRef.current) return;
+    setIsMouseEntered(false);
+    containerRef.current.style.transform = `rotateY(0deg) rotateX(0deg)`;
+  };
+
+  return (
+    <MouseEnterContext.Provider value={[isMouseEntered, setIsMouseEntered]}>
+      <div className={cn("py-5 flex items-center justify-center", containerClassName)} style={{ perspective: "1000px" }}>
+        <div ref={containerRef} onMouseEnter={handleMouseEnter} onMouseMove={handleMouseMove} onMouseLeave={handleMouseLeave} className={cn("flex items-center justify-center relative transition-all duration-200 ease-linear", className)} style={{ transformStyle: "preserve-3d" }}>
+          {children}
+        </div>
+      </div>
+    </MouseEnterContext.Provider>
+  );
+};
+
+const CardBody = ({ children, className }: { children: React.ReactNode; className?: string }) => {
+  return <div className={cn("h-auto w-auto [transform-style:preserve-3d] [&>*]:[transform-style:preserve-3d]", className)}>{children}</div>;
+};
+
+const CardItem = ({ as: Tag = "div", children, className, translateX = 0, translateY = 0, translateZ = 0, rotateX = 0, rotateY = 0, rotateZ = 0, ...rest }: any) => {
+  const ref = useRef<HTMLDivElement>(null);
+  const [isMouseEntered] = useContext(MouseEnterContext) || [false];
+
+  useEffect(() => {
+    if (!ref.current) return;
+    if (isMouseEntered) {
+      ref.current.style.transform = `translateX(${translateX}px) translateY(${translateY}px) translateZ(${translateZ}px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) rotateZ(${rotateZ}deg)`;
+    } else {
+      ref.current.style.transform = `translateX(0px) translateY(0px) translateZ(0px) rotateX(0deg) rotateY(0deg) rotateZ(0deg)`;
+    }
+  }, [isMouseEntered, translateX, translateY, translateZ, rotateX, rotateY, rotateZ]);
+
+  return <Tag ref={ref} className={cn("w-fit transition duration-200 ease-linear", className)} {...rest}>{children}</Tag>;
+};
+
+// --- MAIN ABOUT COMPONENT ---
+
 const StaggeredText: React.FC<{ children: React.ReactNode; className?: string; delay?: number }> = ({ children, className = "", delay = 0 }) => {
   return (
     <motion.div
       initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-10%" }}
-      transition={{ duration: 0.8, delay: delay, ease: [0.22, 1, 0.36, 1] }} // Custom bezier for "heavy/luxurious" feel
+      transition={{ duration: 0.8, delay: delay, ease: [0.22, 1, 0.36, 1] }}
       className={className}
     >
       {children}
@@ -16,11 +77,9 @@ const StaggeredText: React.FC<{ children: React.ReactNode; className?: string; d
   );
 };
 
-// Helper for Sticky Section Layout
 const StickySection: React.FC<{ title: string; number: string; children: React.ReactNode }> = ({ title, number, children }) => {
   return (
     <div className="flex flex-col md:flex-row gap-12 md:gap-24 mb-32 md:mb-48 relative z-10">
-      {/* Sticky Header */}
       <div className="md:w-1/3">
         <div className="sticky top-32">
           <motion.div 
@@ -35,8 +94,6 @@ const StickySection: React.FC<{ title: string; number: string; children: React.R
           </motion.div>
         </div>
       </div>
-      
-      {/* Scrolling Content */}
       <div className="md:w-2/3 pt-4 md:pt-20">
         {children}
       </div>
@@ -46,59 +103,22 @@ const StickySection: React.FC<{ title: string; number: string; children: React.R
 
 const About: React.FC = () => {
   const containerRef = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start end", "end start"]
-  });
-
-  // Enhanced Parallax transforms
-  // Background moves slightly slower than scroll (translateY positive opposes scroll Up)
+  const { scrollYProgress } = useScroll({ target: containerRef, offset: ["start end", "end start"] });
   const yBackground = useTransform(scrollYProgress, [0, 1], [0, 150]);
-  
-  // Lines move faster/counter direction for depth
   const yLines = useTransform(scrollYProgress, [0, 1], [0, -250]);
-  
-  // New: Floating abstract shape/text parallax that floats upwards
-  const yFloating = useTransform(scrollYProgress, [0, 1], [100, -100]);
 
   return (
-    <section 
-      id="about" 
-      ref={containerRef}
-      className="relative bg-luxury-black text-white py-32 overflow-hidden min-h-screen border-b border-gold-400/30"
-    >
-      {/* Background Image Layer - Subtle Movement */}
-      <motion.div 
-        style={{ y: yBackground }} 
-        className="absolute top-[-10%] right-0 w-3/4 h-[120%] opacity-[0.04] pointer-events-none z-0"
-      >
-         <img 
-            src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=1000&auto=format&fit=crop" 
-            alt="Architecture Background" 
-            className="w-full h-full object-cover grayscale" 
-         />
+    <section id="about" ref={containerRef} className="relative bg-luxury-black text-white py-32 overflow-hidden min-h-screen border-b border-gold-400/30">
+      <motion.div style={{ y: yBackground }} className="absolute top-[-10%] right-0 w-3/4 h-[120%] opacity-[0.04] pointer-events-none z-0">
+         <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=1000&auto=format&fit=crop" alt="Architecture Background" className="w-full h-full object-cover grayscale" />
          <div className="absolute inset-0 bg-gradient-to-l from-transparent to-luxury-black" />
       </motion.div>
-      
-      {/* Moving Structural Lines (Enhanced Parallax) */}
       <motion.div style={{ y: yLines }} className="absolute left-10 top-[-20%] w-[1px] h-[150%] bg-white/5 z-0" />
       <motion.div style={{ y: yLines, x: 20 }} className="absolute left-10 top-[-10%] w-[1px] h-[150%] bg-gold-400/10 z-0" />
       
-      {/* Floating Abstract Element */}
-      <motion.div 
-        style={{ y: yFloating }} 
-        className="absolute bottom-20 right-10 text-[20rem] font-header text-white pointer-events-none z-0 leading-none select-none opacity-[0.02] hidden lg:block"
-      >
-        M
-      </motion.div>
-
       <div className="container mx-auto px-6 relative z-10">
-        
-        {/* Intro Statement - Large & Impactful */}
         <div className="mb-40 md:pl-20 max-w-5xl">
-          <StaggeredText className="font-subtitle text-gold-400 text-sm tracking-[0.3em] uppercase mb-8">
-            Who We Are
-          </StaggeredText>
+          <StaggeredText className="font-subtitle text-gold-400 text-sm tracking-[0.3em] uppercase mb-8">Who We Are</StaggeredText>
           <h1 className="font-header text-5xl md:text-7xl lg:text-8xl leading-[0.9] text-white">
             <StaggeredText delay={0.1}>Architects of</StaggeredText>
             <StaggeredText delay={0.2} className="text-gray-500">Lifestyle.</StaggeredText>
@@ -107,73 +127,75 @@ const About: React.FC = () => {
           </h1>
         </div>
 
-        {/* Section 1: The Vision */}
+        {/* Section 1: The Vision (UPDATED IMAGE: "Economic Freedom") */}
         <StickySection title="The Vision" number="01">
-          <StaggeredText className="mb-8">
-            <p className="font-body text-xl md:text-2xl text-gray-200 leading-relaxed max-w-2xl">
-              We do not merely sell properties; we facilitate the acquisition of trophies. 
-              In a city defined by the impossible, MAPSTONE stands as the bridge between 
-              aspiration and reality.
-            </p>
-          </StaggeredText>
-          <StaggeredText delay={0.1}>
-            <p className="font-body text-gray-400 text-lg leading-relaxed max-w-2xl mb-12">
-              Our philosophy is rooted in the belief that true luxury is silent. 
-              It is found in the precision of a transaction, the exclusivity of access, 
-              and the discretion of our service. We serve a clientele that understands 
-              value beyond price tags.
-            </p>
-          </StaggeredText>
-          <motion.div 
-            initial={{ scaleX: 0 }}
-            whileInView={{ scaleX: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 1, ease: "circOut" }}
-            className="w-full h-[1px] bg-white/10 mb-12 origin-left"
-          />
+          <CardContainer className="inter-var mb-8">
+            <CardBody className="bg-black/40 relative group/card border-white/10 w-full h-auto rounded-xl p-6 border hover:border-gold-400/50 transition-colors duration-500">
+              <CardItem translateZ="50" className="w-full mb-6">
+                <img 
+                  src="https://kadibusiness.com/wp-content/uploads/2024/02/Dubai-Economy-and-Tourism.jpg" 
+                  alt="Dubai Economy and Vision" 
+                  className="h-60 w-full object-cover rounded-xl group-hover/card:shadow-xl" 
+                />
+              </CardItem>
+              <CardItem translateZ="60" className="text-xl font-bold text-white mb-2">Beyond Reality</CardItem>
+              <CardItem as="p" translateZ="40" className="text-gray-300 text-sm max-w-sm">
+                We do not merely sell properties; we facilitate the acquisition of trophies. In a city defined by the impossible, MAPSTONE stands as the bridge between aspiration and reality.
+              </CardItem>
+            </CardBody>
+          </CardContainer>
         </StickySection>
 
-        {/* Section 2: The Methodology */}
+        {/* Section 2: Methodology */}
         <StickySection title="Methodology" number="02">
-           <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-              <StaggeredText>
-                <h3 className="font-header text-2xl text-gold-400 mb-4">Precision</h3>
-                <p className="font-body text-gray-400">
-                  Data is our currency. We utilize proprietary market intelligence to 
-                  identify shifts before they occur, ensuring your portfolio is always 
-                  positioned for maximum yield.
-                </p>
-              </StaggeredText>
-              <StaggeredText delay={0.2}>
-                <h3 className="font-header text-2xl text-gold-400 mb-4">Discretion</h3>
-                <p className="font-body text-gray-400">
-                  Privacy is the ultimate luxury. Our off-market division handles 
-                  sensitive acquisitions for high-profile individuals with 
-                  absolute confidentiality.
-                </p>
-              </StaggeredText>
-           </div>
-           
-           <StaggeredText delay={0.4} className="mt-16">
-              <img 
-                src="https://i.postimg.cc/76ctw2Kg/66.jpg" 
-                alt="Luxury Exterior Design" 
-                className="w-full aspect-[16/9] object-cover filter grayscale contrast-125 hover:grayscale-0 transition-all duration-1000 ease-out"
-              />
-              <p className="mt-4 text-xs font-subtitle text-gray-500 tracking-widest text-right">THE ART OF LIVING</p>
-           </StaggeredText>
+          <CardContainer className="inter-var">
+            <CardBody className="bg-black/40 relative group/card border-white/10 w-full h-auto rounded-xl p-6 border hover:border-gold-400/50">
+              <CardItem translateZ="80" className="w-full mt-4">
+                <img src="https://i.postimg.cc/76ctw2Kg/66.jpg" alt="Luxury Interior" className="h-60 w-full object-cover rounded-xl group-hover/card:shadow-xl grayscale group-hover/card:grayscale-0 transition-all duration-500" />
+              </CardItem>
+              <div className="flex flex-col md:flex-row gap-6 mt-8">
+                <div>
+                  <CardItem translateZ="50" className="text-xl font-header text-gold-400 mb-2">Precision</CardItem>
+                  <CardItem translateZ="40" className="text-gray-400 text-sm">Data is our currency. We utilize proprietary market intelligence to identify shifts before they occur.</CardItem>
+                </div>
+                <div>
+                  <CardItem translateZ="50" className="text-xl font-header text-gold-400 mb-2">Discretion</CardItem>
+                  <CardItem translateZ="40" className="text-gray-400 text-sm">Privacy is the ultimate luxury. Our off-market division handles sensitive acquisitions with absolute confidentiality.</CardItem>
+                </div>
+              </div>
+            </CardBody>
+          </CardContainer>
         </StickySection>
 
         {/* Section 3: The Standard */}
         <StickySection title="The Standard" number="03">
-           <StaggeredText>
-             <div className="border-l border-gold-400 pl-8 md:pl-12 py-2">
-               <blockquote className="font-header text-3xl md:text-4xl text-white leading-tight">
-                 "MAPSTONE is not for everyone. It is for those who demand the exceptional 
-                 as a baseline, not a bonus."
-               </blockquote>
-             </div>
-           </StaggeredText>
+          <CardContainer className="inter-var">
+            <CardBody className="bg-gradient-to-br from-black to-gray-900 relative group/card border-gold-400/20 w-full h-auto rounded-xl p-8 border hover:shadow-2xl hover:shadow-gold-400/10">
+              <CardItem translateZ="40" className="w-full flex justify-center mb-6">
+                 <div className="w-16 h-16 rounded-full border border-gold-400 flex items-center justify-center"><span className="font-serif text-gold-400 text-2xl">M</span></div>
+              </CardItem>
+              <CardItem translateZ="60" className="font-header text-3xl md:text-4xl text-white leading-tight text-center">
+                "MAPSTONE is not for everyone. It is for those who demand the exceptional as a baseline."
+              </CardItem>
+            </CardBody>
+          </CardContainer>
+        </StickySection>
+
+        {/* Section 4: Connectivity (UPDATED IMAGE: "Global Connectivity") */}
+        <StickySection title="Connectivity" number="04">
+          <CardContainer className="inter-var">
+             <CardBody className="bg-black/40 relative group/card border-white/10 w-full h-auto rounded-xl p-6 border hover:border-gold-400/50">
+                <CardItem translateZ="100" className="w-full">
+                  <img 
+                    src="https://www.caterermiddleeast.com/cloud/2022/02/26/dubai-tourism-news-2021.jpg" 
+                    alt="Global Connectivity" 
+                    className="h-60 w-full object-cover rounded-xl group-hover/card:shadow-xl opacity-80" 
+                  />
+                </CardItem>
+                <CardItem translateZ="50" className="text-2xl font-header text-white mt-8 mb-2">Global Reach</CardItem>
+                <CardItem translateZ="30" className="text-gray-400">From Dubai to London, New York to Singapore. Our network grants you access to the world's most coveted off-market opportunities.</CardItem>
+             </CardBody>
+          </CardContainer>
         </StickySection>
 
       </div>
