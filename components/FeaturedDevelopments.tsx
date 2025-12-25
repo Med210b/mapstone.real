@@ -3,9 +3,10 @@ import { motion, AnimatePresence } from 'framer-motion';
 import SectionTitle from './SectionTitle';
 import { MapPin, DollarSign, Calendar, ArrowLeft, ArrowRight } from 'lucide-react';
 
-// --- IMAGE PATH HELPER ---
+// --- IMAGE PATH HELPER (FIXED) ---
 const getImgPath = (folder: string, index: number) => {
-  return `/MAPSTONE-REAL-ESTATE/projects/${folder}/${index}.jpg`;
+  // The path must match your GitHub Repository name exactly: "mapstone.real"
+  return `/mapstone.real/projects/${folder}/${index}.jpg`;
 };
 
 // --- DATA: PROJECTS ---
@@ -83,7 +84,6 @@ const projects = [
 ];
 
 // --- NEW COMPONENT: ANIMATED STACK GALLERY ---
-// Adapted from "Animated Testimonials" to work with Project Images
 const AnimatedStack = ({ 
   images, 
   autoplay = false 
@@ -156,8 +156,9 @@ const AnimatedStack = ({
                 draggable={false}
                 className="h-full w-full rounded-3xl object-cover object-center shadow-2xl border border-white/10"
                 onError={(e) => {
-                    // console.error("Missing:", e.currentTarget.src);
-                    e.currentTarget.style.display = 'none';
+                   // This helps debug if images are still missing
+                   console.error("Image failed to load:", e.currentTarget.src);
+                   e.currentTarget.style.display = 'none';
                 }}
               />
             </motion.div>
@@ -211,9 +212,9 @@ const FeaturedDevelopments: React.FC = () => {
                 <div className={`space-y-8 ${index % 2 === 1 ? 'lg:order-1' : 'lg:order-2'}`}>
                   <div>
                     <div className="flex items-center justify-between mb-4">
-                       <span className="text-[#D4AF37] font-mono text-xs tracking-widest border border-[#D4AF37]/30 px-3 py-1 rounded">
-                         {project.handover}
-                       </span>
+                        <span className="text-[#D4AF37] font-mono text-xs tracking-widest border border-[#D4AF37]/30 px-3 py-1 rounded">
+                          {project.handover}
+                        </span>
                     </div>
                     <h3 className="text-4xl font-header text-white mb-2">{project.name}</h3>
                     {/* @ts-ignore */}
@@ -255,7 +256,7 @@ const FeaturedDevelopments: React.FC = () => {
                     </div>
                   </div>
 
-                  {/* UPDATED: Changed Button to Link pointing to Contact Form */}
+                  {/* Button linked to Contact section */}
                   <a 
                     href="#contact" 
                     className="group relative block w-full bg-white text-black py-4 font-bold uppercase tracking-widest overflow-hidden text-center"
