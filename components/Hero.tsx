@@ -10,10 +10,12 @@ const Hero: React.FC = () => {
 
   // Updated to the direct embed URL from the provided iframe
   const videoUrl = "https://www.youtube.com/embed/EKWZYT8HBbA";
-  const posterUrl = "https://picsum.photos/1920/1080?grayscale&blur=2";
+  
+  // ✅ FIXED: Updated to use your local Dubai.jpg as the fallback/loading image
+  const posterUrl = "/mapstone.real/Dubai.jpg";
 
   return (
-    <section id="home" className="relative h-screen w-full overflow-hidden flex items-center justify-center bg-luxury-black border-b border-gold-400/30">
+    <section id="home" className="relative h-screen w-full overflow-hidden flex items-center justify-center bg-black border-b border-[#D4AF37]/30">
       
       {/* Video Background */}
       <VideoBackground 
@@ -36,7 +38,7 @@ const Hero: React.FC = () => {
             </h1>
             
             {/* REAL ESTATE - Smaller & Elegant */}
-            <div className="text-xl md:text-3xl text-transparent bg-clip-text bg-gradient-to-r from-gold-200 via-white to-gold-200 font-subtitle tracking-[0.5em] uppercase mt-4 md:mt-6">
+            <div className="text-xl md:text-3xl text-transparent bg-clip-text bg-gradient-to-r from-[#F7E7CE] via-white to-[#F7E7CE] font-subtitle tracking-[0.5em] uppercase mt-4 md:mt-6">
                <TextReveal text="REAL ESTATE" delay={0.6} />
             </div>
           </div>
@@ -45,7 +47,7 @@ const Hero: React.FC = () => {
             initial={{ scaleX: 0 }}
             animate={{ scaleX: 1 }}
             transition={{ delay: 1.2, duration: 1, ease: "circOut" }}
-            className="w-24 h-0.5 bg-gold-400 mx-auto mb-10 shadow-[0_0_15px_rgba(233,177,79,0.8)]" 
+            className="w-24 h-0.5 bg-[#D4AF37] mx-auto mb-10 shadow-[0_0_15px_rgba(212,175,55,0.8)]" 
           />
           
           <motion.p 
@@ -58,17 +60,18 @@ const Hero: React.FC = () => {
           </motion.p>
           
           <div className="flex justify-center items-center">
-             {/* Glowing Gold Button - Centered - Updated to link to About */}
+             {/* Glowing Gold Button */}
              <motion.a
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              whileHover={{ scale: 1.05, boxShadow: "0 0 25px rgba(233, 177, 79, 0.3)" }}
+              whileHover={{ scale: 1.05, boxShadow: "0 0 25px rgba(212, 175, 55, 0.3)" }}
               whileTap={{ scale: 0.95 }}
               transition={{ delay: 1.8 }}
               href="#about"
-              className="gold-border-btn group px-12 py-4 cursor-pointer"
+              className="border border-[#D4AF37] group px-12 py-4 cursor-pointer relative overflow-hidden"
             >
-              <span className="text-gold-400 font-subtitle uppercase tracking-widest font-bold group-hover:text-white transition-colors text-sm">
+              <div className="absolute inset-0 bg-[#D4AF37]/10 group-hover:bg-[#D4AF37] transition-colors duration-500" />
+              <span className="relative z-10 text-[#D4AF37] font-subtitle uppercase tracking-widest font-bold group-hover:text-black transition-colors text-sm">
                 Discover MAPSTONE
               </span>
             </motion.a>
@@ -84,8 +87,8 @@ const Hero: React.FC = () => {
         className="absolute bottom-10 left-1/2 transform -translate-x-1/2 z-20"
       >
         <div className="flex flex-col items-center gap-2">
-           <span className="text-xs text-gold-400 font-subtitle tracking-widest uppercase">Scroll</span>
-           <div className="w-0.5 h-16 bg-gradient-to-b from-gold-400 to-transparent" />
+           <span className="text-xs text-[#D4AF37] font-subtitle tracking-widest uppercase">Scroll</span>
+           <div className="w-0.5 h-16 bg-gradient-to-b from-[#D4AF37] to-transparent" />
         </div>
       </motion.div>
     </section>
