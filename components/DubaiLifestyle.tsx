@@ -1,147 +1,130 @@
 import React, { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
-import SectionTitle from './SectionTitle';
+import { ArrowRight, Globe, Shield, Wallet } from 'lucide-react';
 
-// Helper: Staggered Text Reveal
-const StaggeredText: React.FC<{ children: React.ReactNode; className?: string; delay?: number }> = ({ children, className = "", delay = 0 }) => {
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 40 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-10%" }}
-      transition={{ duration: 0.8, delay: delay, ease: [0.22, 1, 0.36, 1] }}
-      className={className}
-    >
-      {children}
-    </motion.div>
-  );
-};
-
-interface FeatureProps {
-  title: string;
-  subtitle: string;
-  description: string;
-  img: string;
-  index: number;
-}
-
-const FeatureSection: React.FC<FeatureProps> = ({ title, subtitle, description, img, index }) => {
-  const isEven = index % 2 === 0;
-  
-  return (
-    <div className={`flex flex-col ${isEven ? 'lg:flex-row' : 'lg:flex-row-reverse'} gap-12 lg:gap-24 items-center mb-32 last:mb-0 relative z-10`}>
-      {/* Text Content */}
-      <div className="lg:w-1/2">
-        <StaggeredText>
-          <div className="flex items-center gap-4 mb-6">
-            <span className="text-gold-400 font-subtitle text-sm tracking-widest uppercase">0{index + 1}</span>
-            <div className="h-[1px] w-12 bg-gold-400/50" />
-            <span className="text-gray-400 font-subtitle text-xs tracking-widest uppercase">{subtitle}</span>
-          </div>
-        </StaggeredText>
-        
-        <StaggeredText delay={0.1}>
-          <h3 className="font-header text-4xl md:text-5xl text-white mb-8 leading-tight">{title}</h3>
-        </StaggeredText>
-        
-        <StaggeredText delay={0.2}>
-          <p className="font-body text-gray-300 text-lg leading-relaxed mb-8">
-            {description}
-          </p>
-        </StaggeredText>
-        
-        <StaggeredText delay={0.3}>
-          <button className="text-gold-400 font-subtitle text-sm uppercase tracking-widest hover:text-white transition-colors flex items-center gap-2 group">
-            Discover More 
-            <span className="transform transition-transform group-hover:translate-x-2">→</span>
-          </button>
-        </StaggeredText>
-      </div>
-
-      {/* Image Content */}
-      <div className="lg:w-1/2 w-full">
-         <div className="relative overflow-hidden group">
-            <motion.div
-               initial={{ scale: 1.2, opacity: 0 }}
-               whileInView={{ scale: 1, opacity: 1 }}
-               viewport={{ once: true }}
-               transition={{ duration: 1.5, ease: "easeOut" }}
-               className="aspect-[4/5] w-full"
-            >
-              <img 
-                src={img} 
-                alt={title} 
-                className="w-full h-full object-cover transition-transform duration-[2s] group-hover:scale-105" 
-              />
-            </motion.div>
-            
-            {/* Decorative Frame */}
-            <div className="absolute inset-4 border border-white/10 pointer-events-none transition-all duration-700 group-hover:inset-8 group-hover:border-gold-400/30" />
-            
-            {/* Overlay Gradient */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
-         </div>
-      </div>
-    </div>
-  );
-};
+const features = [
+  {
+    id: 1,
+    subtitle: "Strategic Hub",
+    title: "Global Connectivity",
+    description: "Dubai stands at the crossroads of the world. With one-third of the global population within a 4-hour flight, it serves as the ultimate bridge between East and West.",
+    icon: <Globe className="w-6 h-6 text-[#D4AF37]" />,
+    image: "https://res.cloudinary.com/dtljonz0f/image/upload/c_auto,ar_4:3,w_3840,g_auto/f_auto/q_auto/v1/shutterstock_2414539851_ss_non-editorial_dcx0bm?_a=BAVAZGGf0" 
+  },
+  {
+    id: 2,
+    subtitle: "Economic Freedom",
+    title: "Tax-Free Living",
+    description: "Experience the liberation of true wealth retention. With 0% income tax, 0% capital gains tax, and 0% property tax, Dubai provides a fiscal environment designed for prosperity, allowing your investments to compound without friction.",
+    icon: <Wallet className="w-6 h-6 text-[#D4AF37]" />,
+    image: "https://cdn.britannica.com/43/134743-050-D0625A44/train-first-Dubai-emirate-rapid-transit-line-kind-Sept-10-2009.jpg"
+  },
+  {
+    id: 3,
+    subtitle: "Secure Environment",
+    title: "Safety & Stability",
+    description: "Consistently ranked as one of the safest cities globally, Dubai offers a secure environment for families and investors alike, backed by a stable currency pegged to the USD.",
+    icon: <Shield className="w-6 h-6 text-[#D4AF37]" />,
+    // --- UPDATED IMAGE (Ain Dubai) ---
+    image: "https://www.aindubai.com/sites/default/files/Homepage%20Banner%202%20-%20Mobile.webp"
+  }
+];
 
 const DubaiLifestyle: React.FC = () => {
-  const containerRef = useRef<HTMLElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start end", "end start"]
   });
 
-  // Parallax effects for background elements
-  const yBackground = useTransform(scrollYProgress, [0, 1], [0, 150]);
-
-  const features = [
-    {
-      title: "Global Connectivity",
-      subtitle: "Strategic Hub",
-      description: "Dubai stands at the crossroads of the world. With one-third of the global population within a 4-hour flight, it serves as the ultimate bridge between East and West, offering unparalleled access to emerging markets and global capitals.",
-      img: "https://i.postimg.cc/1tdrYJjz/4.jpg"
-    },
-    {
-      title: "Economic Freedom",
-      subtitle: "Tax-Free Living",
-      description: "Experience the liberation of true wealth retention. With 0% income tax, 0% capital gains tax, and 0% property tax, Dubai provides a fiscal environment designed for prosperity, allowing your investments to compound without friction.",
-      img: "https://images.unsplash.com/photo-1512453979798-5ea904f18431?q=80&w=1000&auto=format&fit=crop"
-    },
-    {
-      title: "Architectural Excellence",
-      subtitle: "World-Class Design",
-      description: "From the tallest towers to underwater villas, Dubai pushes the boundaries of possibility. It is a canvas where the world's leading architects redefine luxury, creating residential masterpieces that are as functional as they are breathtaking.",
-      img: "https://i.postimg.cc/d0BWnRYz/luxury-architecture-exterior-design.jpg"
-    }
-  ];
+  const y = useTransform(scrollYProgress, [0, 1], [100, -100]);
 
   return (
-    <section id="dubai" ref={containerRef} className="py-32 bg-luxury-black text-white relative border-b border-gold-400/30 overflow-hidden">
-       {/* Background Noise/Texture */}
-       <div className="absolute inset-0 opacity-[0.02] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] mix-blend-overlay" />
-       
-       {/* Parallax Background Elements */}
-       <motion.div style={{ y: yBackground }} className="absolute right-0 top-20 w-1/3 h-[80%] bg-gradient-to-b from-gold-400/5 to-transparent pointer-events-none" />
-       <div className="absolute left-10 top-0 bottom-0 w-[1px] bg-white/5 hidden lg:block" />
+    <section className="py-32 bg-black text-white overflow-hidden relative border-t border-[#D4AF37]/30">
+      <div className="container mx-auto px-6 relative z-10">
+        
+        {/* Header */}
+        <div className="mb-24 text-center max-w-4xl mx-auto">
+          <motion.p 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-[#D4AF37] text-sm tracking-[0.3em] uppercase mb-4 font-subtitle"
+          >
+            Why Dubai?
+          </motion.p>
+          <motion.h2 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.1 }}
+            className="text-4xl md:text-6xl font-header font-bold mb-6"
+          >
+            The Center of the World
+          </motion.h2>
+          <motion.p 
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
+            className="text-gray-400 font-body text-lg leading-relaxed"
+          >
+            Dubai is not merely a city; it is a testament to human ambition. A sanctuary for innovation, luxury, and security, it offers a lifestyle that is unmatched anywhere else on the globe.
+          </motion.p>
+        </div>
 
-       <div className="container mx-auto px-6 relative z-10">
-          <div className="mb-32 text-center max-w-4xl mx-auto">
-             <SectionTitle title="The City of Future" subtitle="Destination Dubai" light />
-             <StaggeredText delay={0.2}>
-               <p className="font-body text-xl text-gray-400 leading-relaxed">
-                 Dubai is not merely a city; it is a testament to human ambition. A sanctuary for innovation, luxury, and security, it offers a lifestyle that is unmatched anywhere else on the globe.
-               </p>
-             </StaggeredText>
-          </div>
+        {/* Features Grid */}
+        <div className="space-y-32">
+          {features.map((feature, index) => (
+            <div key={feature.id} className={`flex flex-col ${index % 2 === 1 ? 'md:flex-row-reverse' : 'md:flex-row'} items-center gap-12 md:gap-24`}>
+              
+              {/* Text Side */}
+              <motion.div 
+                initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8 }}
+                className="flex-1 space-y-8"
+              >
+                <div className="flex items-center gap-4 mb-4">
+                  <span className="text-[#D4AF37] font-mono text-sm">0{feature.id}</span>
+                  <div className="h-[1px] w-12 bg-[#D4AF37]" />
+                  <span className="text-gray-400 text-xs tracking-[0.2em] uppercase">{feature.subtitle}</span>
+                </div>
+                
+                <h3 className="text-4xl font-header text-white">{feature.title}</h3>
+                <p className="text-gray-400 font-body leading-relaxed text-lg">{feature.description}</p>
+                
+                <button className="group flex items-center gap-2 text-[#D4AF37] text-sm tracking-widest uppercase hover:text-white transition-colors pt-4">
+                  Discover More 
+                  <ArrowRight className="w-4 h-4 group-hover:translate-x-2 transition-transform" />
+                </button>
+              </motion.div>
 
-          <div>
-             {features.map((feature, index) => (
-                <FeatureSection key={index} {...feature} index={index} />
-             ))}
-          </div>
-       </div>
+              {/* Image Side */}
+              <motion.div 
+                initial={{ opacity: 0, scale: 0.95 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8 }}
+                className="flex-1 relative group"
+              >
+                <div className="absolute inset-0 bg-[#D4AF37] transform translate-x-2 translate-y-2 opacity-20 group-hover:translate-x-4 group-hover:translate-y-4 transition-transform duration-500" />
+                <div className="relative overflow-hidden aspect-[4/5]">
+                  <img 
+                    src={feature.image} 
+                    alt={feature.title} 
+                    className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 scale-100 group-hover:scale-110"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                </div>
+              </motion.div>
+
+            </div>
+          ))}
+        </div>
+
+      </div>
     </section>
   );
 };
