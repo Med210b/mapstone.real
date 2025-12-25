@@ -4,10 +4,11 @@ import Hero from './components/Hero';
 import About from './components/About';
 import DubaiLifestyle from './components/DubaiLifestyle';
 import Services from './components/Services';
-// Updated the import below
 import WealthArchitecture from './components/WealthArchitecture';
 import RealEstate from './components/RealEstate';
+import FeaturedDevelopments from './components/FeaturedDevelopments'; // <--- NEW IMPORT
 import MarketUpdate from './components/MarketUpdate';
+import Partners from './components/Partners'; // <--- NEW IMPORT
 import Contact from './components/Contact';
 import Footer from './components/Footer';
 import { VideoProvider } from './components/VideoContext';
@@ -22,10 +23,17 @@ function App() {
         <About />
         <DubaiLifestyle />
         <Services />
-        {/* Updated the component usage below */}
         <WealthArchitecture />
         <RealEstate />
+        
+        {/* Added Featured Developments here */}
+        <FeaturedDevelopments />
+        
         <MarketUpdate />
+        
+        {/* Added Partners section here (before Contact) */}
+        <Partners />
+        
         <Contact />
         <Footer />
         <VideoControl />
