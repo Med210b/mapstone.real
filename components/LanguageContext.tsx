@@ -1,27 +1,33 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { translations } from '../constants/translations';
 
-// Define the shape of our context
 type Language = keyof typeof translations;
+
 interface LanguageContextType {
   language: Language;
   setLanguage: (lang: Language) => void;
-  t: typeof translations['EN']; // Type helper for autocomplete
+  t: typeof translations['EN'];
   dir: 'ltr' | 'rtl';
 }
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
 export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [language, setLanguage] = useState<Language>('EN');
-  
-  // Calculate direction (Arabic is RTL)
-  const dir = language === 'AR' ? 'rtl' : 'ltr';
+  // 1. Initialize from LocalStorage if available, otherwise default to 'EN'
+  const [language, setLanguageState] = useState<Language>(() => {
+    const saved = localStorage.getItem('mapstone_lang');
+    return (saved as Language) || 'EN';
+  });
 
-  // Current translation object
+  const setLanguage = (lang: Language) => {
+    setLanguageState(lang);
+    localStorage.setItem('mapstone_lang', lang); // 2. Save choice immediately
+  };
+  
+  // 3. Handle Direction (Arabic RTL)
+  const dir = language === 'AR' ? 'rtl' : 'ltr';
   const t = translations[language];
 
-  // Effect: Update the HTML document direction automatically
   useEffect(() => {
     document.documentElement.dir = dir;
     document.documentElement.lang = language.toLowerCase();
@@ -34,7 +40,6 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   );
 };
 
-// Hook to use the language in any component
 export const useLanguage = () => {
   const context = useContext(LanguageContext);
   if (!context) throw new Error("useLanguage must be used within a LanguageProvider");

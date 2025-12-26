@@ -1,11 +1,10 @@
 import React from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import VideoBackground from './VideoBackground';
-import { useLanguage } from './LanguageContext'; // 1. Import Hook
+import { useLanguage } from './LanguageContext'; // Import Hook
 
 const Hero: React.FC = () => {
-  const { t } = useLanguage(); // 2. Get Translations
-
+  const { t } = useLanguage(); // Get Translations
   const { scrollY } = useScroll();
   const yContent = useTransform(scrollY, [0, 500], [0, 100]);
   const opacity = useTransform(scrollY, [0, 300], [1, 0]);
@@ -15,10 +14,7 @@ const Hero: React.FC = () => {
 
   return (
     <section id="home" className="relative h-[100dvh] w-full overflow-hidden flex items-center justify-center bg-black">
-      <div 
-        className="absolute inset-0 bg-cover bg-center transition-opacity duration-700"
-        style={{ backgroundImage: `linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.7)), url(${posterUrl})` }}
-      />
+      <div className="absolute inset-0 bg-cover bg-center transition-opacity duration-700" style={{ backgroundImage: `linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.7)), url(${posterUrl})` }} />
       <VideoBackground videoUrl={videoUrl} posterUrl={posterUrl} overlayOpacity={0.5} />
 
       <motion.div style={{ opacity, y: yContent }} className="relative z-20 text-center px-6 w-full mt-20 md:mt-0">
