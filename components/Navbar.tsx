@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Link, useLocation } from 'react-router-dom';
 import { LOGO_URL } from '../constants';
 import LanguageSelector from './LanguageSelector';
 import { useLanguage } from './LanguageContext';
@@ -9,6 +10,7 @@ const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const { t } = useLanguage();
+  const location = useLocation();
 
   useEffect(() => {
     const handleScroll = () => { setScrolled(window.scrollY > 50); };
@@ -17,47 +19,48 @@ const Navbar: React.FC = () => {
   }, []);
 
   const navItems = [
-    { label: t.nav.home, href: "#/" },
-    { label: t.nav.projects, href: "#/projects" },
-    { label: t.nav.investment, href: "#/wealth-architecture" },
-    { label: t.nav.market, href: "#/market-update" },
-    { label: t.nav.contact, href: "#/contact" },
+    { label: t.nav.home, id: "home" },
+    { label: t.nav.projects, id: "featured-developments" },
+    { label: t.nav.investment, id: "investment-strategy" },
+    { label: t.nav.market, id: "market-update" },
+    { label: t.nav.contact, id: "contact" },
   ];
+
+  const handleNavClick = (id: string) => {
+    setIsOpen(false);
+    if (location.pathname !== '/') {
+      // If not on home, go to home then scroll
+      window.location.href = `/#/${id === 'home' ? '' : '#' + id}`;
+    } else {
+      // If on home, just scroll
+      const element = document.getElementById(id);
+      if (element) element.scrollIntoView({ behavior: 'smooth' });
+      else if (id === 'home') window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
 
   const whatsappLink = "https://wa.me/971585928787";
 
   return (
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b border-[#D4AF37]/30 ${scrolled ? 'bg-black/90 backdrop-blur-md py-2' : 'bg-transparent py-4 md:py-6'}`}>
       <div className="container mx-auto px-4 md:px-6 flex items-center justify-between">
-        
-        {/* Logo */}
-        <a href="#/" className="relative group">
+        <Link to="/" className="relative group">
            <img src={LOGO_URL} alt="MAPSTONE REAL ESTATE" className="h-16 xs:h-20 md:h-40 w-auto object-contain transition-transform duration-300 group-hover:scale-105" />
-        </a>
+        </Link>
 
-        {/* Desktop Menu */}
         <div className="hidden md:flex items-center space-x-8">
           {navItems.map((item) => (
-            <a key={item.label} href={item.href} className="text-white font-subtitle uppercase text-sm tracking-widest hover:text-[#D4AF37] transition-colors relative group">
+            <button key={item.label} onClick={() => handleNavClick(item.id)} className="text-white font-subtitle uppercase text-sm tracking-widest hover:text-[#D4AF37] transition-colors relative group">
               {item.label}
               <span className="absolute -bottom-2 left-0 w-0 h-0.5 bg-[#D4AF37] transition-all duration-300 group-hover:w-full" />
-            </a>
+            </button>
           ))}
-          
           <LanguageSelector />
-
-          {/* UPDATED: WHATSAPP LINK */}
-          <a 
-            href={whatsappLink}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="px-6 py-2 border border-[#D4AF37] text-[#D4AF37] font-subtitle uppercase text-sm tracking-widest hover:bg-[#D4AF37] hover:text-black transition-all duration-300"
-          >
+          <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="px-6 py-2 border border-[#D4AF37] text-[#D4AF37] font-subtitle uppercase text-sm tracking-widest hover:bg-[#D4AF37] hover:text-black transition-all duration-300">
             {t.nav.inquire}
           </a>
         </div>
 
-        {/* Mobile Controls */}
         <div className="md:hidden flex items-center gap-4">
           <LanguageSelector />
           <button className="text-white p-2 hover:text-[#D4AF37] transition-colors" onClick={() => setIsOpen(!isOpen)}>
@@ -66,33 +69,20 @@ const Navbar: React.FC = () => {
         </div>
       </div>
 
-      {/* Mobile Menu Overlay */}
       <AnimatePresence>
         {isOpen && (
           <motion.div initial={{ opacity: 0, x: '100%' }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: '100%' }} transition={{ type: 'spring', damping: 25, stiffness: 200 }} className="md:hidden fixed inset-0 bg-black z-[60] flex flex-col items-center justify-center">
             <div className="flex flex-col items-center justify-center space-y-10 w-full px-10">
               {navItems.map((item, index) => (
-                <motion.a key={item.label} href={item.href} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: index * 0.1 }} onClick={() => setIsOpen(false)} className="text-xl text-white font-header tracking-[0.2em] uppercase hover:text-[#D4AF37] transition-colors">
+                <motion.button key={item.label} onClick={() => handleNavClick(item.id)} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: index * 0.1 }} className="text-xl text-white font-header tracking-[0.2em] uppercase hover:text-[#D4AF37] transition-colors">
                   {item.label}
-                </motion.a>
+                </motion.button>
               ))}
-              {/* Mobile WhatsApp Link */}
-              <motion.a 
-                href={whatsappLink}
-                target="_blank"
-                rel="noopener noreferrer"
-                initial={{ opacity: 0, y: 20 }} 
-                animate={{ opacity: 1, y: 0 }} 
-                transition={{ delay: 0.5 }} 
-                onClick={() => setIsOpen(false)} 
-                className="mt-4 px-10 py-4 border border-[#D4AF37] text-[#D4AF37] font-subtitle uppercase text-xs tracking-[0.3em]"
-              >
+              <motion.a href={whatsappLink} target="_blank" rel="noopener noreferrer" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }} className="mt-4 px-10 py-4 border border-[#D4AF37] text-[#D4AF37] font-subtitle uppercase text-xs tracking-[0.3em]">
                 {t.nav.book}
               </motion.a>
             </div>
-            <button onClick={() => setIsOpen(false)} className="absolute top-6 right-6 text-[#D4AF37] p-2">
-              <X size={28} />
-            </button>
+            <button onClick={() => setIsOpen(false)} className="absolute top-6 right-6 text-[#D4AF37] p-2"><X size={28} /></button>
           </motion.div>
         )}
       </AnimatePresence>
