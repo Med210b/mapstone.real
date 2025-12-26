@@ -1,4 +1,3 @@
-// Helper to keep English as the default for missing translations
 const defaultEnglish = {
   nav: {
     home: "Home",
@@ -37,47 +36,28 @@ const defaultEnglish = {
     subtitle: "Why Dubai?",
     title: "The Center of the World",
     desc: "Dubai is not merely a city; it is a testament to human ambition. A sanctuary for innovation, luxury, and security, it offers a lifestyle that is unmatched anywhere else on the globe.",
-    f1_sub: "Strategic Hub",
-    f1_title: "Global Connectivity",
-    f1_desc: "Dubai stands at the crossroads of the world. With one-third of the global population within a 4-hour flight, it serves as the ultimate bridge between East and West.",
-    f2_sub: "Economic Freedom",
-    f2_title: "Tax-Free Living",
-    f2_desc: "Experience the liberation of true wealth retention. With 0% income tax, 0% capital gains tax, and 0% property tax, Dubai provides a fiscal environment designed for prosperity.",
-    f3_sub: "Secure Environment",
-    f3_title: "Safety & Stability",
-    f3_desc: "Consistently ranked as one of the safest cities globally, Dubai offers a secure environment for families and investors alike, backed by a stable currency pegged to the USD.",
     btn_discover: "Discover More"
   },
   services: {
     subtitle: "Services",
     title: "Our Expertise",
     s1_title: "Property Sales",
-    s1_desc: "Expert guidance in buying and selling prestigious properties with market-leading strategies.",
+    s1_desc: "Expert guidance in buying and selling prestigious properties.",
     s2_title: "Investment Advisory",
-    s2_desc: "Data-driven insights to maximize your real estate portfolio's growth and stability.",
+    s2_desc: "Data-driven insights to maximize your portfolio.",
     s3_title: "Luxury Leasing",
-    s3_desc: "Connecting discerning tenants with the world's most exclusive residences.",
+    s3_desc: "Connecting discerning tenants with exclusive residences.",
     s4_title: "Property Management",
-    s4_desc: "Comprehensive care for your assets, ensuring pristine condition and tenant satisfaction."
+    s4_desc: "Comprehensive care for your assets."
   },
   wealth: {
     subtitle: "INVESTMENT STRATEGY",
     title: "Wealth Architecture",
-    intro: "Real estate in Dubai is more than acquisition; it is a vehicle for legacy creation.",
-    card1_title: "Off-Plan Capital Growth",
-    card1_desc: "Secure assets at pre-launch prices with priority access.",
-    card2_title: "Portfolio Diversification",
-    card2_desc: "Anchor wealth in Dubai's dollar-pegged economy.",
-    c1_point1: "EMAAR PLATINUM ACCESS",
-    c1_point2: "HIGH-YIELD PAYMENT PLANS",
-    c2_point1: "SHORT-TERM RENTAL MGMT",
-    c2_point2: "CORPORATE STRUCTURING",
+    intro: "Real estate in Dubai is a vehicle for legacy creation.",
     crypto_title: "Crypto-Ready",
     crypto_desc: "Seamless transactions via digital assets.",
     visa_title: "Golden Visa",
     visa_desc: "10-Year residency for property investors.",
-    advisory_title: "Private Client Advisory",
-    advisory_desc: "Book a confidential consultation with our senior investment directors.",
     btn_schedule: "Schedule Briefing"
   },
   contact: {
@@ -104,25 +84,64 @@ const defaultEnglish = {
   projects: {
     subtitle: "New Launches",
     title: "Featured Developments",
-    intro: "Explore our latest collection. Use the arrows to shuffle through project galleries.",
+    intro: "Explore our latest collection.",
     btn_brochure: "Request Brochure",
     label_location: "Location",
     label_price: "Starting From",
     label_payment: "Payment Plan",
     label_type: "Unit Type"
+  },
+  // --- NEW SECTIONS ---
+  market: {
+    subtitle: "Market Intelligence",
+    title: "Dubai Real Estate Report",
+    desc: "Access our comprehensive Q3 2024 analysis covering capital appreciation trends, rental yields, and emerging hotspots.",
+    stat1: "Transactions",
+    stat2: "Appreciation",
+    stat3: "Yield",
+    btn_download: "Download PDF Report"
+  },
+  faq_page: {
+    subtitle: "Support",
+    title: "Frequently Asked Questions",
+    items: [
+      { q: "Can foreigners buy property in Dubai?", a: "Yes, foreigners can buy property in designated freehold areas in Dubai. This grants you full ownership rights." },
+      { q: "What is the Golden Visa?", a: "The UAE Golden Visa is a long-term residence visa (5 or 10 years) granted to investors who purchase property worth AED 2 million or more." },
+      { q: "What are the upfront costs?", a: "Typically: DLD fee (4%), Trustee fees (approx. AED 4,000), and agency fees (2%)." },
+      { q: "Can I pay with Cryptocurrency?", a: "Yes, MAPSTONE facilitates seamless transactions using major cryptocurrencies." },
+      { q: "Do you offer property management?", a: "Absolutely. Our Wealth Architecture service includes comprehensive property management." }
+    ]
+  },
+  privacy_page: {
+    subtitle: "Legal",
+    title: "Privacy Policy",
+    sections: [
+      { t: "1. Information Collection", c: "At MAPSTONE Real Estate, we collect personal information you provide directly to us, such as when you create an account or contact us." },
+      { t: "2. Use of Information", c: "We use the information we collect to provide, maintain, and improve our services and to process your transactions." },
+      { t: "3. Data Protection", c: "We implement appropriate technical and organizational measures to protect the security of your personal information." },
+      { t: "4. Cookies", c: "Our website uses cookies to enhance your browsing experience and analyze site traffic." }
+    ]
+  },
+  terms_page: {
+    subtitle: "Legal",
+    title: "Terms & Conditions",
+    sections: [
+      { t: "1. Acceptance of Terms", c: "By accessing and using the MAPSTONE Real Estate website, you accept and agree to be bound by the terms of this agreement." },
+      { t: "2. Property Information", c: "All property descriptions and prices are for informational purposes only. MAPSTONE does not guarantee completeness or correctness." },
+      { t: "3. Intellectual Property", c: "The content, layout, and design of this website are owned by MAPSTONE Real Estate and protected by UAE laws." },
+      { t: "4. Limitation of Liability", c: "In no event shall MAPSTONE Real Estate be liable for any damages arising out of the use of this site." }
+    ]
   }
 };
 
-// We export this object where EVERY language key exists.
-// Even if they are just copies of English right now, this prevents the crash.
 export const translations = {
   EN: defaultEnglish,
-  FR: defaultEnglish, // French (To be translated)
-  AR: defaultEnglish, // Arabic (To be translated)
-  ES: defaultEnglish, // Spanish (To be translated)
-  IT: defaultEnglish, // Italian (To be translated)
-  DE: defaultEnglish, // German (To be translated)
-  RU: defaultEnglish, // Russian (To be translated)
-  TR: defaultEnglish, // Turkish (To be translated)
-  ZH: defaultEnglish  // Chinese (To be translated)
+  FR: defaultEnglish, 
+  AR: defaultEnglish, 
+  ES: defaultEnglish, 
+  IT: defaultEnglish, 
+  DE: defaultEnglish, 
+  RU: defaultEnglish, 
+  TR: defaultEnglish, 
+  ZH: defaultEnglish 
 };
