@@ -4,7 +4,7 @@ import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 // Layout Components
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
-import VideoControl from './components/VideoControl';
+// REMOVED: VideoControl import to remove the "Static View" button
 import { VideoProvider } from './components/VideoContext';
 import BackgroundEffect from './components/BackgroundEffect';
 import { LanguageProvider } from './components/LanguageContext';
@@ -21,7 +21,7 @@ import FeaturedDevelopments from './components/FeaturedDevelopments';
 import MarketUpdate from './components/MarketUpdate';
 import Contact from './components/Contact';
 
-// New Legal Pages
+// Legal Pages
 import PrivacyPolicy from './components/PrivacyPolicy';
 import TermsConditions from './components/TermsConditions';
 import FAQ from './components/FAQ';
@@ -67,7 +67,7 @@ function App() {
             </main>
             
             <Footer />
-            <VideoControl />
+            {/* REMOVED: <VideoControl /> is gone */}
           </div>
         </Router>
       </LanguageProvider>

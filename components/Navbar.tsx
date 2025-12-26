@@ -2,16 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { LOGO_URL } from '../constants';
-
-// NEW IMPORTS
 import LanguageSelector from './LanguageSelector';
 import { useLanguage } from './LanguageContext';
 
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  
-  // Use our new hook to get translated text
   const { t } = useLanguage();
 
   useEffect(() => {
@@ -20,14 +16,15 @@ const Navbar: React.FC = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Define links using the translation object 't'
   const navItems = [
     { label: t.nav.home, href: "#/" },
-    { label: t.nav.projects, href: "#/projects" }, // Assuming you are using HashRouter
+    { label: t.nav.projects, href: "#/projects" },
     { label: t.nav.investment, href: "#/wealth-architecture" },
     { label: t.nav.market, href: "#/market-update" },
     { label: t.nav.contact, href: "#/contact" },
   ];
+
+  const whatsappLink = "https://wa.me/971585928787";
 
   return (
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b border-[#D4AF37]/30 ${scrolled ? 'bg-black/90 backdrop-blur-md py-2' : 'bg-transparent py-4 md:py-6'}`}>
@@ -47,10 +44,15 @@ const Navbar: React.FC = () => {
             </a>
           ))}
           
-          {/* LANGUAGE SELECTOR */}
           <LanguageSelector />
 
-          <a href="#contact" className="px-6 py-2 border border-[#D4AF37] text-[#D4AF37] font-subtitle uppercase text-sm tracking-widest hover:bg-[#D4AF37] hover:text-black transition-all duration-300">
+          {/* UPDATED: WHATSAPP LINK */}
+          <a 
+            href={whatsappLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="px-6 py-2 border border-[#D4AF37] text-[#D4AF37] font-subtitle uppercase text-sm tracking-widest hover:bg-[#D4AF37] hover:text-black transition-all duration-300"
+          >
             {t.nav.inquire}
           </a>
         </div>
@@ -74,7 +76,17 @@ const Navbar: React.FC = () => {
                   {item.label}
                 </motion.a>
               ))}
-              <motion.a href="#contact" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }} onClick={() => setIsOpen(false)} className="mt-4 px-10 py-4 border border-[#D4AF37] text-[#D4AF37] font-subtitle uppercase text-xs tracking-[0.3em]">
+              {/* Mobile WhatsApp Link */}
+              <motion.a 
+                href={whatsappLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                initial={{ opacity: 0, y: 20 }} 
+                animate={{ opacity: 1, y: 0 }} 
+                transition={{ delay: 0.5 }} 
+                onClick={() => setIsOpen(false)} 
+                className="mt-4 px-10 py-4 border border-[#D4AF37] text-[#D4AF37] font-subtitle uppercase text-xs tracking-[0.3em]"
+              >
                 {t.nav.book}
               </motion.a>
             </div>
