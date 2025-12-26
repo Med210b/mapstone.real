@@ -176,14 +176,23 @@ const About: React.FC = () => {
           </CardContainer>
         </StickySection>
 
-        {/* Section 3: The Standard */}
+      {/* Section 3: The Standard (UPDATED) */}
         <StickySection title="The Standard" number="03">
           <CardContainer className="inter-var">
-            <CardBody className="bg-gradient-to-br from-black to-gray-900 relative group/card border-[#D4AF37]/20 w-full h-auto rounded-xl p-8 border hover:shadow-2xl hover:shadow-[#D4AF37]/10">
-              <CardItem translateZ="40" className="w-full flex justify-center mb-6">
-                 <div className="w-16 h-16 rounded-full border border-[#D4AF37] flex items-center justify-center"><span className="font-serif text-[#D4AF37] text-2xl">M</span></div>
+            {/* Updated container to match Section 1 & 2 styles (bg-black/40 instead of gradient) */}
+            <CardBody className="bg-black/40 relative group/card border-white/10 w-full h-auto rounded-xl p-6 border hover:border-[#D4AF37]/50 transition-colors duration-500">
+              
+              {/* NEW: Added Image at the top to match other sections */}
+              <CardItem translateZ="50" className="w-full mb-6">
+                 <img 
+                   src="https://i.postimg.cc/nVW3NT4R/Whats-App-Image-2025-09-04-at-01-18-25-e24c3ba8.jpg" 
+                   alt="The Standard - Mapstone" 
+                   className="h-60 w-full object-cover rounded-xl group-hover/card:shadow-xl" 
+                 />
               </CardItem>
-              <CardItem translateZ="60" className="font-header text-3xl md:text-4xl text-white leading-tight text-center">
+
+              {/* Existing Text with matching layout */}
+              <CardItem translateZ="60" className="font-header text-2xl md:text-3xl text-white leading-tight text-center mt-4 px-4">
                 "MAPSTONE is not for everyone. It is for those who demand the exceptional as a baseline."
               </CardItem>
             </CardBody>
