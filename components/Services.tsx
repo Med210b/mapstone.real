@@ -1,95 +1,125 @@
-import React from 'react';
+import React, { useRef, useState, createContext, useContext, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import SectionTitle from './SectionTitle';
 import { Home, TrendingUp, Key, Shield } from 'lucide-react';
+import { useLanguage } from './LanguageContext';
+import { clsx, type ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
 
-const services = [
-  {
-    icon: <Home size={40} />,
-    title: "Property Sales",
-    description: "Expert guidance in buying and selling prestigious properties with market-leading strategies."
-  },
-  {
-    icon: <TrendingUp size={40} />,
-    title: "Investment Advisory",
-    description: "Data-driven insights to maximize your real estate portfolio's growth and stability."
-  },
-  {
-    icon: <Key size={40} />,
-    title: "Luxury Leasing",
-    description: "Connecting discerning tenants with the world's most exclusive residences."
-  },
-  {
-    icon: <Shield size={40} />,
-    title: "Property Management",
-    description: "Comprehensive care for your assets, ensuring pristine condition and tenant satisfaction."
-  }
-];
+// --- 3D CARD UTILITIES (Added internally to keep file self-contained) ---
+function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
 
-const Services: React.FC = () => {
+const MouseEnterContext = createContext<[boolean, React.Dispatch<React.SetStateAction<boolean>>] | undefined>(undefined);
+
+const CardContainer = ({ children, className, containerClassName }: { children?: React.ReactNode; className?: string; containerClassName?: string }) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [isMouseEntered, setIsMouseEntered] = useState(false);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!containerRef.current) return;
+    const { left, top, width, height } = containerRef.current.getBoundingClientRect();
+    const x = (e.clientX - left - width / 2) / 25;
+    const y = (e.clientY - top - height / 2) / 25;
+    containerRef.current.style.transform = `rotateY(${x}deg) rotateX(${y}deg)`;
+  };
+
+  const handleMouseEnter = () => { setIsMouseEntered(true); };
+  const handleMouseLeave = () => {
+    if (!containerRef.current) return;
+    setIsMouseEntered(false);
+    containerRef.current.style.transform = `rotateY(0deg) rotateX(0deg)`;
+  };
+
   return (
-    <section id="services" className="py-24 bg-luxury-charcoal text-white relative overflow-hidden border-b border-gold-400/30">
+    <MouseEnterContext.Provider value={[isMouseEntered, setIsMouseEntered]}>
+      <div className={cn("py-5 flex items-center justify-center", containerClassName)} style={{ perspective: "1000px" }}>
+        <div ref={containerRef} onMouseEnter={handleMouseEnter} onMouseMove={handleMouseMove} onMouseLeave={handleMouseLeave} className={cn("flex items-center justify-center relative transition-all duration-200 ease-linear", className)} style={{ transformStyle: "preserve-3d" }}>
+          {children}
+        </div>
+      </div>
+    </MouseEnterContext.Provider>
+  );
+};
+
+const CardBody = ({ children, className }: { children: React.ReactNode; className?: string }) => {
+  return <div className={cn("h-auto w-auto [transform-style:preserve-3d] [&>*]:[transform-style:preserve-3d]", className)}>{children}</div>;
+};
+
+const CardItem = ({ as: Tag = "div", children, className, translateX = 0, translateY = 0, translateZ = 0, ...rest }: any) => {
+  const ref = useRef<HTMLDivElement>(null);
+  const [isMouseEntered] = useContext(MouseEnterContext) || [false];
+
+  useEffect(() => {
+    if (!ref.current) return;
+    if (isMouseEntered) {
+      ref.current.style.transform = `translateX(${translateX}px) translateY(${translateY}px) translateZ(${translateZ}px)`;
+    } else {
+      ref.current.style.transform = `translateX(0px) translateY(0px) translateZ(0px)`;
+    }
+  }, [isMouseEntered, translateX, translateY, translateZ]);
+
+  return <Tag ref={ref} className={cn("w-fit transition duration-200 ease-linear", className)} {...rest}>{children}</Tag>;
+};
+
+// --- MAIN SERVICES COMPONENT ---
+const Services: React.FC = () => {
+  const { t } = useLanguage();
+
+  const services = [
+    { icon: <Home size={40} />, title: t.services.s1_title, description: t.services.s1_desc },
+    { icon: <TrendingUp size={40} />, title: t.services.s2_title, description: t.services.s2_desc },
+    { icon: <Key size={40} />, title: t.services.s3_title, description: t.services.s3_desc },
+    { icon: <Shield size={40} />, title: t.services.s4_title, description: t.services.s4_desc }
+  ];
+
+  return (
+    <section id="services" className="py-24 bg-transparent text-white relative overflow-hidden border-b border-[#D4AF37]/30">
       
-      {/* Animated Geometric Background (Holographic Grid Effect) */}
+      {/* Background Pattern */}
       <div className="absolute inset-0 opacity-10 pointer-events-none">
         <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
           <defs>
             <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
-              <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#e9b14f" strokeWidth="0.5"/>
+              <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#D4AF37" strokeWidth="0.5"/>
             </pattern>
           </defs>
           <rect width="100%" height="100%" fill="url(#grid)" />
-          
-          {/* Moving Highlight Line */}
-          <motion.line 
-             x1="0" y1="0" x2="100%" y2="100%" 
-             stroke="#e9b14f" 
-             strokeWidth="1"
-             initial={{ pathLength: 0, opacity: 0 }}
-             animate={{ pathLength: 1, opacity: [0, 0.5, 0] }}
-             transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-          />
-          <motion.circle 
-             cx="50%" cy="50%" r="200" 
-             fill="radial-gradient(circle, rgba(233,177,79,0.1) 0%, rgba(0,0,0,0) 70%)"
-             animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
-             transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-          />
         </svg>
       </div>
 
       <div className="container mx-auto px-6 relative z-10">
-        <SectionTitle title="Our Expertise" subtitle="Services" light />
-
+        <SectionTitle title={t.services.title} subtitle={t.services.subtitle} light />
+        
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {services.map((service, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.1, duration: 0.6 }}
-              whileHover={{ 
-                y: -10,
-                transition: { type: "spring", stiffness: 300 }
-              }}
-              className="bg-luxury-black/50 backdrop-blur-sm p-8 border border-white/5 hover:border-gold-400 transition-all duration-500 group relative overflow-hidden"
-            >
-              {/* Card Hover Gradient */}
-              <div className="absolute inset-0 bg-gradient-to-br from-gold-400/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              
-              <div className="relative z-10">
-                <div className="text-gold-400 mb-6 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-500">
-                  {service.icon}
-                </div>
-                <h3 className="font-header text-2xl mb-4 text-white group-hover:text-gold-400 transition-colors">
-                  {service.title}
-                </h3>
-                <p className="font-body text-gray-400 leading-relaxed group-hover:text-gray-200 transition-colors">
-                  {service.description}
-                </p>
-              </div>
-            </motion.div>
+            <CardContainer key={index} className="inter-var w-full h-full">
+              <CardBody className="bg-gradient-to-br from-[#2d0f0f] via-black to-[#0f0505] relative group/card border border-[#8B2020]/40 w-full h-auto rounded-xl p-8 hover:shadow-2xl hover:shadow-[#8B2020]/20 hover:border-[#D4AF37] transition-all duration-300">
+                
+                {/* 3D Floating Icon */}
+                <CardItem translateZ="50" className="mb-6 w-full">
+                  <div className="w-16 h-16 rounded-full bg-[#8B2020]/10 border border-[#8B2020]/30 flex items-center justify-center text-[#D4AF37] group-hover/card:scale-110 transition-transform duration-300">
+                    {service.icon}
+                  </div>
+                </CardItem>
+
+                {/* 3D Floating Title */}
+                <CardItem translateZ="40" className="w-full">
+                  <h3 className="font-header text-2xl mb-4 text-white group-hover/card:text-[#D4AF37] transition-colors">
+                    {service.title}
+                  </h3>
+                </CardItem>
+
+                {/* 3D Floating Description */}
+                <CardItem translateZ="30" className="w-full">
+                  <p className="font-body text-gray-400 leading-relaxed text-sm group-hover/card:text-gray-200 transition-colors">
+                    {service.description}
+                  </p>
+                </CardItem>
+
+              </CardBody>
+            </CardContainer>
           ))}
         </div>
       </div>
