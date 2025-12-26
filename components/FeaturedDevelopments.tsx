@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useMotionValue, useTransform } from 'framer-motion';
 import SectionTitle from './SectionTitle';
 import { MapPin, DollarSign, Calendar, ArrowLeft, ArrowRight } from 'lucide-react';
 import { useLanguage } from './LanguageContext';
 
 // --- IMAGE HANDLING ---
-// This tries to load your local image. If it fails, the onError in the img tag will switch to a fallback.
 const getImgPath = (folder: string, index: number) => `/mapstone.real/projects/${folder}/${index}.jpg`;
-
 const FALLBACK_IMAGE = "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=1000&auto=format&fit=crop";
 
 const projects = [
@@ -20,7 +18,6 @@ const projects = [
     type: "Offices", 
     payment: "70/30", 
     handover: "Q2 2029", 
-    // Generates paths 1.jpg to 5.jpg
     images: Array.from({ length: 5 }, (_, i) => getImgPath('Shahrukhz by Danube', i + 1)) 
   },
   { 
@@ -80,53 +77,104 @@ const projects = [
   }
 ];
 
-// --- ANIMATION COMPONENT (UNCHANGED LOGIC) ---
+// --- ENHANCED ANIMATED STACK ---
 const AnimatedStack = ({ images }: { images: string[] }) => {
   const [active, setActive] = useState(0);
+  const [dragStart, setDragStart] = useState(0);
+  
+  // Motion values for swipe effect
+  const x = useMotionValue(0);
+  const rotate = useTransform(x, [-200, 200], [-10, 10]); // Rotate while dragging
+  const opacity = useTransform(x, [-200, -100, 0, 100, 200], [0.5, 1, 1, 1, 0.5]);
 
   const handleNext = () => setActive((prev) => (prev + 1) % images.length);
   const handlePrev = () => setActive((prev) => (prev - 1 + images.length) % images.length);
 
+  const onDragEnd = (_: any, info: any) => {
+    const swipeThreshold = 50;
+    if (info.offset.x < -swipeThreshold) {
+      handleNext();
+    } else if (info.offset.x > swipeThreshold) {
+      handlePrev();
+    }
+  };
+
   return (
     <div className="relative w-full flex flex-col items-center">
-      {/* Adjusted height to prevent huge empty spaces */}
-      <div className="relative h-[300px] md:h-[450px] w-full max-w-lg">
+      {/* CARD STACK CONTAINER */}
+      <div className="relative w-full aspect-[4/3] md:aspect-[3/2] max-w-lg cursor-grab active:cursor-grabbing perspective-1000">
         <AnimatePresence mode='popLayout'>
           {images.map((src, index) => {
+            // Logic to show only current, previous, and next cards for performance
+            if (index < active - 1 || index > active + 1) return null;
+            
             const isActive = index === active;
+            
             return (
               <motion.div
-                key={`${src}-${index}`} // Unique key fix
-                initial={{ opacity: 0, scale: 0.9, z: -100 }}
+                key={`${src}-${index}`}
+                style={{
+                  zIndex: isActive ? 10 : 5,
+                  x: isActive ? x : 0, // Only active card moves with drag
+                  rotate: isActive ? rotate : (index % 2 === 0 ? 2 : -2), // Subtle tilt for background cards
+                  opacity: isActive ? opacity : 0.6,
+                  scale: isActive ? 1 : 0.95,
+                }}
+                initial={{ opacity: 0, scale: 0.9, z: -50 }}
                 animate={{ 
                   opacity: isActive ? 1 : 0.4, 
                   scale: isActive ? 1 : 0.9, 
-                  z: isActive ? 0 : -100,
-                  rotate: isActive ? 0 : (index % 2 === 0 ? 5 : -5), // Subtle rotation for stack effect
-                  zIndex: isActive ? 10 : 0
+                  z: isActive ? 0 : -50,
+                  y: isActive ? 0 : 15, // Push background cards down slightly
                 }}
-                transition={{ duration: 0.5, ease: "easeInOut" }}
-                className="absolute inset-0 origin-bottom"
+                exit={{ opacity: 0, scale: 0.8, x: -100 }}
+                transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                drag={isActive ? "x" : false} // Enable drag only for active card
+                dragConstraints={{ left: 0, right: 0 }} // Snap back to center
+                dragElastic={0.6}
+                onDragEnd={isActive ? onDragEnd : undefined}
+                className="absolute inset-0 w-full h-full"
               >
-                <img 
-                  src={src} 
-                  alt="Project" 
-                  className="h-full w-full rounded-2xl object-cover shadow-2xl border border-white/10 bg-[#1a1a1a]"
-                  onError={(e) => {
-                    // AUTO-FIX: If image is missing, show fallback immediately
-                    e.currentTarget.src = FALLBACK_IMAGE;
-                  }}
-                />
+                <div className={`relative w-full h-full rounded-2xl overflow-hidden border ${isActive ? 'border-[#D4AF37]/50 shadow-[0_0_30px_rgba(212,175,55,0.15)]' : 'border-white/10'} bg-[#1a1a1a]`}>
+                  <img 
+                    src={src} 
+                    alt="Project" 
+                    className="w-full h-full object-cover"
+                    draggable="false" // Prevent browser image drag
+                    onError={(e) => { e.currentTarget.src = FALLBACK_IMAGE; }}
+                  />
+                  {/* Subtle Gradient Overlay for depth */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
+                  
+                  {/* Swipe Hint (Only visible on active card) */}
+                  {isActive && (
+                    <div className="absolute bottom-4 right-4 bg-black/50 backdrop-blur-md px-3 py-1 rounded-full border border-white/10 text-[10px] text-white/70 md:hidden pointer-events-none">
+                      Swipe ↔
+                    </div>
+                  )}
+                </div>
               </motion.div>
             );
           })}
         </AnimatePresence>
       </div>
 
-      {/* Controls */}
-      <div className="flex justify-center gap-6 mt-6 md:mt-10 relative z-20">
-        <button onClick={handlePrev} className="group flex h-10 w-10 items-center justify-center rounded-full bg-white/10 hover:bg-[#D4AF37] transition-all"><ArrowLeft className="h-5 w-5 text-white group-hover:text-black" /></button>
-        <button onClick={handleNext} className="group flex h-10 w-10 items-center justify-center rounded-full bg-white/10 hover:bg-[#D4AF37] transition-all"><ArrowRight className="h-5 w-5 text-white group-hover:text-black" /></button>
+      {/* CONTROLS (Larger for Mobile) */}
+      <div className="flex justify-center gap-8 mt-8 relative z-20">
+        <button 
+          onClick={handlePrev} 
+          className="group flex h-12 w-12 items-center justify-center rounded-full bg-white/5 border border-white/10 hover:bg-[#D4AF37] hover:border-[#D4AF37] transition-all active:scale-95"
+          aria-label="Previous Image"
+        >
+          <ArrowLeft className="h-5 w-5 text-white group-hover:text-black" />
+        </button>
+        <button 
+          onClick={handleNext} 
+          className="group flex h-12 w-12 items-center justify-center rounded-full bg-white/5 border border-white/10 hover:bg-[#D4AF37] hover:border-[#D4AF37] transition-all active:scale-95"
+          aria-label="Next Image"
+        >
+          <ArrowRight className="h-5 w-5 text-white group-hover:text-black" />
+        </button>
       </div>
     </div>
   );
@@ -136,7 +184,6 @@ const FeaturedDevelopments: React.FC = () => {
   const { t } = useLanguage();
 
   return (
-    // Removed min-h-screen to fix empty space issues
     <section id="featured-developments" className="bg-[#050505] text-white py-16 md:py-24 border-t border-[#D4AF37]/20">
       <div className="container mx-auto px-6">
         
@@ -146,15 +193,13 @@ const FeaturedDevelopments: React.FC = () => {
           {t.projects.intro}
         </p>
 
-        {/* Reduced vertical gap between projects from 20 to 10 */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 md:gap-20 items-center">
           {projects.map((project, index) => (
             <React.Fragment key={project.id}>
               
-              {/* Content Wrapper */}
               <div className={`contents ${index % 2 === 1 ? 'lg:flex-row-reverse' : ''}`}>
                 
-                {/* 1. Image Stack */}
+                {/* 1. Image Stack (Swipeable) */}
                 <div className={`w-full ${index % 2 === 1 ? 'lg:order-2' : 'lg:order-1'}`}>
                   <AnimatedStack images={project.images} />
                 </div>
@@ -207,7 +252,7 @@ const FeaturedDevelopments: React.FC = () => {
 
                   <a 
                     href="#contact" 
-                    className="group relative block w-full bg-white text-black py-4 font-bold uppercase tracking-widest overflow-hidden text-center text-sm md:text-base"
+                    className="group relative block w-full bg-white text-black py-4 font-bold uppercase tracking-widest overflow-hidden text-center text-sm md:text-base rounded-sm hover:shadow-[0_0_20px_rgba(212,175,55,0.4)] transition-all"
                   >
                     <span className="relative z-10 group-hover:text-white transition-colors duration-300">{t.projects.btn_brochure}</span>
                     <div className="absolute inset-0 bg-[#D4AF37] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
