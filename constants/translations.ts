@@ -1,4 +1,3 @@
-// 1. DEFAULT ENGLISH
 const defaultEnglish = {
   nav: { home: "Home", projects: "Projects", investment: "Investment", market: "Market Data", contact: "Contact", inquire: "Inquire", book: "Book Briefing" },
   hero: { discover: "Discover the Portfolio", explore: "Explore" },
@@ -10,12 +9,9 @@ const defaultEnglish = {
     standard: "The Standard", quote: "MAPSTONE is not for everyone.",
     connectivity: "Connectivity", global_reach: "Global Reach", reach_desc: "From Dubai to London."
   },
-  // --- NEW: PARTNERS ---
   partners: { subtitle: "Our Network", title: "Strategic Partners" },
-  // --- NEW: REAL ESTATE (Timeless Wisdom) ---
   real_estate: { subtitle: "Timeless Wisdom", title: "The Safest Investment", quote: "Real estate cannot be lost or stolen, nor can it be carried away. Purchased with common sense, paid for in full, and managed with reasonable care, it is about the safest investment in the world." },
-  
-  lifestyle: { subtitle: "Why Dubai?", title: "The Center of the World", desc: "Dubai is not merely a city; it is a testament to human ambition.", btn_discover: "Discover More" },
+  lifestyle: { subtitle: "Why Dubai?", title: "The Center of the World", desc: "Dubai is not merely a city; it is a testament to human ambition.", btn_discover: "Discover More", f1_title: "Global Connectivity", f1_desc: "Dubai stands at the crossroads.", f2_title: "Tax-Free Living", f2_desc: "0% Income Tax.", f3_title: "Safety & Stability", f3_desc: "Safest city globally." },
   services: {
     subtitle: "Services", title: "Our Expertise",
     s1_title: "Property Sales", s1_desc: "Expert guidance in buying and selling.",
@@ -57,27 +53,27 @@ const defaultEnglish = {
   projects: { subtitle: "New Launches", title: "Featured Developments", intro: "Explore collection.", btn_brochure: "Request Brochure", label_location: "Location", label_price: "From", label_payment: "Plan", label_type: "Type" }
 };
 
-// 2. EXPORT
 export const translations = {
   EN: defaultEnglish,
   FR: { ...defaultEnglish, 
+    nav: { home: "Accueil", projects: "Projets", investment: "Investissement", market: "Marché", contact: "Contact", inquire: "Demander", book: "Réserver" },
     partners: { subtitle: "Notre Réseau", title: "Partenaires Stratégiques" },
     real_estate: { subtitle: "Sagesse Intemporelle", title: "L'Investissement le Plus Sûr", quote: "L'immobilier ne peut être ni perdu ni volé..." },
-    lifestyle: { subtitle: "Pourquoi Dubaï?", title: "Le Centre du Monde", desc: "Dubaï est un témoignage de l'ambition humaine.", btn_discover: "En Savoir Plus" },
+    lifestyle: { subtitle: "Pourquoi Dubaï?", title: "Le Centre du Monde", desc: "Dubaï est un témoignage.", btn_discover: "En Savoir Plus", f1_title: "Connectivité", f2_title: "Sans Impôt", f3_title: "Sécurité" },
     services: { subtitle: "Services", title: "Notre Expertise", s1_title: "Ventes", s1_desc: "Expertise.", s2_title: "Investissement", s2_desc: "Données.", s3_title: "Location", s3_desc: "Luxe.", s4_title: "Gestion", s4_desc: "Soin complet." },
     wealth: { subtitle: "STRATÉGIE", title: "Architecture de Richesse", intro: "Création d'héritage.", crypto_title: "Crypto-Ready", crypto_desc: "Facile.", visa_title: "Golden Visa", visa_desc: "10 ans.", btn_schedule: "Planifier" },
-    footer: { desc: "Immobilier de luxe à Dubaï.", col_explore: "Explorer", col_support: "Support", col_contact: "Contact", rights: "© 2024 MAPSTONE." },
+    footer: { desc: "Immobilier de luxe.", col_explore: "Explorer", col_support: "Support", col_contact: "Contact", rights: "© 2024 MAPSTONE." },
     projects: { subtitle: "Nouveaux", title: "Développements", intro: "Explorer.", btn_brochure: "Brochure", label_location: "Lieu", label_price: "Dès", label_payment: "Plan", label_type: "Type" }
   },
   AR: { ...defaultEnglish, 
+    nav: { home: "الرئيسية", projects: "المشاريع", investment: "الاستثمار", market: "بيانات السوق", contact: "اتصل بنا", inquire: "استفسار", book: "حجز موعد" },
     partners: { subtitle: "شبكتنا", title: "شركاء استراتيجيون" },
-    real_estate: { subtitle: "حكمة خالدة", title: "الاستثمار الأكثر أماناً", quote: "العقار لا يمكن فقدانه أو سرقته..." },
-    lifestyle: { subtitle: "لماذا دبي؟", title: "مركز العالم", desc: "دبي شهادة على الطموح.", btn_discover: "اكتشف المزيد" },
+    real_estate: { subtitle: "حكمة خالدة", title: "الاستثمار الأكثر أماناً", quote: "العقار لا يمكن فقدانه..." },
+    lifestyle: { subtitle: "لماذا دبي؟", title: "مركز العالم", desc: "دبي شهادة طموح.", btn_discover: "المزيد", f1_title: "تواصل", f2_title: "بدون ضرائب", f3_title: "أمان" },
     services: { subtitle: "خدماتنا", title: "خبراتنا", s1_title: "المبيعات", s1_desc: "توجيه.", s2_title: "الاستثمار", s2_desc: "بيانات.", s3_title: "التأجير", s3_desc: "فاخر.", s4_title: "الإدارة", s4_desc: "رعاية." },
     wealth: { subtitle: "الاستراتيجية", title: "هندسة الثروة", intro: "إرث.", crypto_title: "رقمي", crypto_desc: "سلس.", visa_title: "ذهبية", visa_desc: "10 سنوات.", btn_schedule: "جدولة" },
     footer: { desc: "عقارات فاخرة.", col_explore: "استكشف", col_support: "دعم", col_contact: "اتصل", rights: "© 2024 مابستون." },
     projects: { subtitle: "جديد", title: "مشاريع", intro: "اكتشف.", btn_brochure: "كتيب", label_location: "موقع", label_price: "من", label_payment: "دفع", label_type: "نوع" }
   },
-  // Ensure other languages have the new keys (English fallback)
   ES: { ...defaultEnglish }, IT: { ...defaultEnglish }, DE: { ...defaultEnglish }, RU: { ...defaultEnglish }, TR: { ...defaultEnglish }, ZH: { ...defaultEnglish }
 };
