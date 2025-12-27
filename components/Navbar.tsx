@@ -18,7 +18,7 @@ const Navbar: React.FC = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // SAFETY GUARD: Use optional chaining (?.) and fallbacks (||) so it can never be undefined
+  // SAFETY GUARDS: If translations are missing, use these English defaults
   const navItems = [
     { label: t?.nav?.home || "Home", id: "home" },
     { label: t?.nav?.projects || "Projects", id: "featured-developments" },
