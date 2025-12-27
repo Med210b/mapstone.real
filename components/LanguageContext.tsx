@@ -3,23 +3,22 @@ import { translations } from '../constants/translations';
 
 type LanguageContextType = {
   language: string;
-  setLanguage: (lang: any) => void;
+  setLanguage: (lang: string) => void;
   t: any;
 };
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
 export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  // Load saved language or default to English
+  // Initialize state from localStorage
   const [language, setLanguageState] = useState(() => {
-    return localStorage.getItem('mapstone_lang') || 'EN';
+    const saved = localStorage.getItem('mapstone_lang');
+    return saved || 'EN';
   });
 
-  const setLanguage = (lang: any) => {
-    // 1. Update State
+  const setLanguage = (lang: string) => {
     setLanguageState(lang);
-    // 2. Save choice immediately - Fixed Line 24
-    localStorage.setItem('mapstone_lang', String(lang)); 
+    localStorage.setItem('mapstone_lang', lang);
   };
 
   const t = translations[language as keyof typeof translations] || translations.EN;
