@@ -14,6 +14,9 @@ const Footer: React.FC = () => {
     x: "https://x.com/Mapstone_DXB"
   };
 
+  // If t is not ready yet, don't crash the page
+  if (!t) return null;
+
   return (
     <footer className="bg-black border-t border-[#D4AF37]/30 pt-20 pb-10 relative z-20">
       <div className="container mx-auto px-6">
