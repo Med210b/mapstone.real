@@ -9,7 +9,7 @@ import { useLanguage } from './LanguageContext';
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const location = useLocation();
 
   useEffect(() => {
@@ -18,21 +18,20 @@ const Navbar: React.FC = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // SAFEGUARDS: Added fallback strings for every item
   const navItems = [
-    { label: t.nav.home, id: "home" },
-    { label: t.nav.projects, id: "featured-developments" },
-    { label: t.nav.investment, id: "investment-strategy" },
-    { label: t.nav.market, id: "market-update" },
-    { label: t.nav.contact, id: "contact" },
+    { label: t?.nav?.home || "Home", id: "home" },
+    { label: t?.nav?.projects || "Projects", id: "featured-developments" },
+    { label: t?.nav?.investment || "Investment", id: "investment-strategy" },
+    { label: t?.nav?.market || "Market Data", id: "market-update" },
+    { label: t?.nav?.contact || "Contact", id: "contact" },
   ];
 
   const handleNavClick = (id: string) => {
     setIsOpen(false);
     if (location.pathname !== '/') {
-      // If not on home, go to home then scroll
       window.location.href = `/#/${id === 'home' ? '' : '#' + id}`;
     } else {
-      // If on home, just scroll
       const element = document.getElementById(id);
       if (element) element.scrollIntoView({ behavior: 'smooth' });
       else if (id === 'home') window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -57,7 +56,7 @@ const Navbar: React.FC = () => {
           ))}
           <LanguageSelector />
           <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="px-6 py-2 border border-[#D4AF37] text-[#D4AF37] font-subtitle uppercase text-sm tracking-widest hover:bg-[#D4AF37] hover:text-black transition-all duration-300">
-            {t.nav.inquire}
+            {t?.nav?.inquire || "Inquire"}
           </a>
         </div>
 
@@ -79,7 +78,7 @@ const Navbar: React.FC = () => {
                 </motion.button>
               ))}
               <motion.a href={whatsappLink} target="_blank" rel="noopener noreferrer" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }} className="mt-4 px-10 py-4 border border-[#D4AF37] text-[#D4AF37] font-subtitle uppercase text-xs tracking-[0.3em]">
-                {t.nav.book}
+                {t?.nav?.book || "Book Briefing"}
               </motion.a>
             </div>
             <button onClick={() => setIsOpen(false)} className="absolute top-6 right-6 text-[#D4AF37] p-2"><X size={28} /></button>
