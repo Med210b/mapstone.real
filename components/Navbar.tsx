@@ -18,7 +18,7 @@ const Navbar: React.FC = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // SAFETY GUARDS: If translations are missing, use these English defaults
+  // SAFETY SHIELD: These fallback strings stop the 'reading title of undefined' crash
   const navItems = [
     { label: t?.nav?.home || "Home", id: "home" },
     { label: t?.nav?.projects || "Projects", id: "featured-developments" },
