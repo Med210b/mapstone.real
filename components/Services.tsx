@@ -7,6 +7,7 @@ import { motion, useMotionValue, useSpring, useTransform, useScroll, type Motion
 function AnimatedBackground() {
   return (
     <div className="absolute inset-0 -z-10 overflow-hidden pointer-events-none">
+      {/* Animated flowing lines */}
       <svg className="absolute inset-0 h-full w-full" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <linearGradient id="services-grad1" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -18,16 +19,29 @@ function AnimatedBackground() {
             <stop offset="100%" style={{ stopColor: "#6B3410", stopOpacity: 0.15 }} />
           </linearGradient>
         </defs>
+
+        {/* Line 1 */}
         <path d="M-100,200 Q200,100 500,300 T1100,400" stroke="url(#services-grad1)" strokeWidth="2" fill="none" className="services-animate-flow-1" />
+        {/* Line 2 */}
         <path d="M-50,400 Q300,250 700,500 T1300,600" stroke="url(#services-grad2)" strokeWidth="1.5" fill="none" className="services-animate-flow-2" />
+        {/* Line 3 */}
         <path d="M1500,100 Q1200,300 800,200 T100,400" stroke="url(#services-grad1)" strokeWidth="2" fill="none" className="services-animate-flow-3" />
+        {/* Line 4 */}
         <path d="M-200,600 Q100,450 600,700 T1200,800" stroke="#d4af37" strokeWidth="1" fill="none" opacity="0.2" className="services-animate-flow-4" />
+        {/* Line 5 */}
+        <path d="M1400,300 Q1000,500 500,400 T-100,600" stroke="#8B6914" strokeWidth="1.5" fill="none" opacity="0.25" className="services-animate-flow-1" />
+        {/* Line 6 */}
+        <path d="M-150,50 Q400,200 900,100 T1500,300" stroke="#654321" strokeWidth="1" fill="none" opacity="0.2" className="services-animate-flow-3" />
+        {/* Line 7 */}
+        <path d="M1600,500 Q1100,600 600,550 T0,700" stroke="url(#services-grad2)" strokeWidth="2" fill="none" className="services-animate-flow-2" />
+        {/* Line 8 */}
+        <path d="M-300,300 Q200,400 800,250 T1400,500" stroke="#A0522D" strokeWidth="1.5" fill="none" opacity="0.3" className="services-animate-flow-4" />
       </svg>
     </div>
   )
 }
 
-// ==================== CONTAINER SCROLL (FIXED FOR MOBILE) ====================
+// ==================== CONTAINER SCROLL (UPDATED SIZE) ====================
 const ContainerScroll = ({
   titleComponent,
   children,
@@ -41,7 +55,7 @@ const ContainerScroll = ({
   })
   const [isMobile, setIsMobile] = useState(false)
 
-  useEffect(() => {
+  React.useEffect(() => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth <= 768)
     }
@@ -53,7 +67,7 @@ const ContainerScroll = ({
   }, [])
 
   const scaleDimensions = () => {
-    // FIX: Changed from 0.7 to 1.0 (No shrinking on mobile)
+    // UPDATED HERE: Mobile now stays at 1 (Full Size) instead of 0.7
     return isMobile ? [1, 1] : [1.05, 1]
   }
 
@@ -62,8 +76,8 @@ const ContainerScroll = ({
   const translate = useTransform(scrollYProgress, [0, 1], [0, -100])
 
   return (
-    // FIX: Changed h-[60rem] to h-auto / min-h-screen for mobile so it fits naturally
-    <div className="h-auto min-h-screen md:h-[80rem] flex items-center justify-center relative p-2 md:p-20" ref={containerRef}>
+    // UPDATED HEIGHT: h-[80rem] on mobile so it has room to scroll
+    <div className="h-[80rem] md:h-[80rem] flex items-center justify-center relative p-2 md:p-20" ref={containerRef}>
       <div
         className="py-10 md:py-40 w-full relative"
         style={{
@@ -71,7 +85,7 @@ const ContainerScroll = ({
         }}
       >
         <Header translate={translate} titleComponent={titleComponent} />
-        <Card rotate={rotate} translate={translate} scale={scale} isMobile={isMobile}>
+        <Card rotate={rotate} translate={translate} scale={scale}>
           {children}
         </Card>
       </div>
@@ -96,26 +110,24 @@ const Card = ({
   rotate,
   scale,
   children,
-  isMobile
 }: {
   rotate: MotionValue<number>
   scale: MotionValue<number>
   translate: MotionValue<number>
   children: React.ReactNode
-  isMobile: boolean
 }) => {
   return (
     <motion.div
       style={{
-        rotateX: isMobile ? 0 : rotate, // Disable 3D rotation on mobile for clarity
+        rotateX: rotate,
         scale,
         boxShadow:
           "0 0 #0000004d, 0 9px 20px #0000004a, 0 37px 37px #00000042, 0 84px 50px #00000026, 0 149px 60px #0000000a, 0 233px 65px #00000003",
       }}
-      // FIX: Increased mobile height to [40rem] and reduced border/padding
-      className="max-w-7xl -mt-12 mx-auto h-[45rem] md:h-[40rem] w-full border border-white/10 md:border-4 md:border-[#d4af37]/30 p-1 md:p-6 bg-zinc-950 rounded-[20px] md:rounded-[30px] shadow-2xl"
+      // UPDATED HEIGHT: Increased mobile height to [45rem] to fit content
+      className="max-w-7xl -mt-12 mx-auto h-[45rem] md:h-[40rem] w-full border-4 border-[#d4af37]/30 p-2 md:p-6 bg-zinc-950 rounded-[30px] shadow-2xl"
     >
-      <div className="h-full w-full overflow-hidden rounded-xl bg-black md:rounded-2xl p-2 md:p-4">{children}</div>
+      <div className="h-full w-full overflow-hidden rounded-2xl bg-black md:rounded-2xl md:p-4">{children}</div>
     </motion.div>
   )
 }
@@ -139,24 +151,44 @@ const services = [
 // ==================== TILT CARD ====================
 function TiltCard({ title, description, index }: { title: string; description: string; index: number }) {
   const cardRef = useRef<HTMLDivElement>(null)
-  
-  // Simplified for mobile performance
+  const mouseX = useMotionValue(0)
+  const mouseY = useMotionValue(0)
+
+  const rotateX = useSpring(useTransform(mouseY, [-0.5, 0.5], [15, -15]), { stiffness: 200, damping: 20 })
+  const rotateY = useSpring(useTransform(mouseX, [-0.5, 0.5], [-15, 15]), { stiffness: 200, damping: 20 })
+  const titleZ = useSpring(useTransform(mouseX, [-0.5, 0.5], [0, 20]), { stiffness: 200, damping: 20 })
+  const descZ = useSpring(useTransform(mouseX, [-0.5, 0.5], [0, 10]), { stiffness: 200, damping: 20 })
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!cardRef.current) return
+    const rect = cardRef.current.getBoundingClientRect()
+    const x = (e.clientX - rect.left) / rect.width - 0.5
+    const y = (e.clientY - rect.top) / rect.height - 0.5
+    mouseX.set(x); mouseY.set(y)
+  }
+
+  const handleMouseLeave = () => { mouseX.set(0); mouseY.set(0) }
+
   return (
     <motion.div
       ref={cardRef}
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.05, duration: 0.5 }}
-      whileHover={{ scale: 1.02 }}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
+      whileHover={{ scale: 1.03 }}
       className="group relative"
     >
-      <div className="relative h-full overflow-hidden rounded-lg border border-zinc-800/80 bg-zinc-950/95 p-6 backdrop-blur-sm transition-all duration-500 hover:border-[#d4af37]/50 hover:bg-zinc-900/95">
-        <h3 className="mb-3 text-pretty text-base font-medium leading-snug text-[#d4af37]">
+      <div className="relative h-full overflow-hidden rounded-lg border border-zinc-800/80 bg-zinc-950/95 p-6 backdrop-blur-sm transition-all duration-500 hover:border-[#d4af37]/50 hover:bg-zinc-900/95" style={{ transform: "translateZ(40px)", transformStyle: "preserve-3d" }}>
+        <motion.h3 className="mb-3 text-pretty text-base font-medium leading-snug text-[#d4af37]" style={{ translateZ: titleZ }}>
           {title}
-        </h3>
-        <p className="text-pretty text-xs md:text-sm leading-relaxed text-zinc-300">
+        </motion.h3>
+        <motion.p className="text-pretty text-sm leading-relaxed text-zinc-300" style={{ translateZ: descZ }}>
           {description}
-        </p>
+        </motion.p>
+        <div className="pointer-events-none absolute inset-0 rounded-lg opacity-0 transition-opacity duration-500 group-hover:opacity-100" style={{ background: "radial-gradient(circle at center, rgba(212,175,55,0.05) 0%, transparent 70%)" }} />
       </div>
     </motion.div>
   )
@@ -169,28 +201,31 @@ export default function Services() {
       <AnimatedBackground />
       <ContainerScroll
         titleComponent={
-          <div className="mb-10 md:mb-16 text-center px-4">
+          <div className="mb-10 text-center px-4">
             <p className="mb-3 text-xs md:text-sm font-medium tracking-[0.2em] text-[#d4af37]">
-              TAILORED SERVICES
+              TAILORED SERVICES CRAFTED FOR DISCERNING INVESTORS
             </p>
-            <h1 className="text-balance text-4xl md:text-6xl font-light text-white">Bespoke Solutions</h1>
+            <h1 className="text-balance text-4xl font-light text-white md:text-6xl">Bespoke Solutions</h1>
             <div className="mx-auto mt-4 h-[2px] w-24 md:w-32 bg-gradient-to-r from-transparent via-[#d4af37] to-transparent" />
           </div>
         }
       >
         <div className="w-full h-full bg-black p-4 md:p-8 overflow-y-auto">
-          {/* FIX: Increased gap and made it 1 column for mobile */}
-          <div className="grid grid-cols-1 gap-4 md:gap-6 md:grid-cols-2 lg:grid-cols-4 pb-20">
+          {/* UPDATED GRID: 1 column on mobile to make cards bigger */}
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4 pb-20">
             {services.map((service, index) => (
               <TiltCard key={index} title={service.title} description={service.description} index={index} />
             ))}
           </div>
         </div>
       </ContainerScroll>
-
+      
       <style jsx>{`
         @keyframes services-flow-1 { 0%, 100% { opacity: 0.3; transform: translate(0,0); } 50% { opacity: 0.5; transform: translate(30px, -20px); } }
         .services-animate-flow-1 { animation: services-flow-1 25s ease-in-out infinite; }
+        .services-animate-flow-2 { animation: services-flow-1 30s ease-in-out infinite; }
+        .services-animate-flow-3 { animation: services-flow-1 20s ease-in-out infinite; }
+        .services-animate-flow-4 { animation: services-flow-1 28s ease-in-out infinite; }
       `}</style>
     </section>
   )
