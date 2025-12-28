@@ -4,26 +4,21 @@ import { motion } from 'framer-motion';
 interface Props {
   title: string;
   subtitle: string;
-  align?: 'left' | 'center' | 'right';
+  align?: 'left' | 'center';
   light?: boolean;
 }
 
 const SectionTitle: React.FC<Props> = ({ title, subtitle, align = 'center', light = false }) => {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 30 }}
+    <motion.div 
+      initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      transition={{ duration: 0.8 }}
-      className={`mb-16 ${align === 'center' ? 'text-center' : align === 'left' ? 'text-left' : 'text-right'}`}
+      className={`mb-12 ${align === 'center' ? 'text-center' : 'text-left'}`}
     >
-      <h3 className={`font-subtitle text-lg tracking-[0.3em] uppercase mb-3 ${light ? 'text-gold-400' : 'text-luxury-darkRed'}`}>
-        {subtitle}
-      </h3>
-      <h2 className={`font-header text-4xl md:text-5xl ${light ? 'text-white' : 'text-luxury-black'}`}>
-        {title}
-      </h2>
-      <div className={`w-20 h-0.5 mt-6 ${align === 'center' ? 'mx-auto' : ''} bg-gold-400`} />
+      <h4 className="text-[#D4AF37] text-sm tracking-[0.3em] uppercase mb-3 font-subtitle">{subtitle}</h4>
+      <h2 className="text-3xl md:text-5xl font-header font-bold text-white">{title}</h2>
+      <div className={`w-20 h-1 bg-[#D4AF37] mt-4 ${align === 'center' ? 'mx-auto' : ''}`} />
     </motion.div>
   );
 };
