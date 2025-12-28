@@ -2,9 +2,7 @@ import React, { Suspense } from 'react';
 import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
-import BackgroundEffect from './components/BackgroundEffect';
 import { LanguageProvider } from './components/LanguageContext';
-import { VideoProvider } from './components/VideoContext';
 
 // Components
 import Hero from './components/Hero';
@@ -21,50 +19,54 @@ import PrivacyPolicy from './components/PrivacyPolicy';
 import TermsConditions from './components/TermsConditions';
 import FAQ from './components/FAQ';
 
+// Gold Line Divider Component
+const GoldBorder = () => <div className="h-px w-full bg-[#D4AF37]/40 shadow-[0_0_10px_rgba(212,175,55,0.2)]" />;
+
 const Home = () => (
-  <>
+  <div className="flex flex-col bg-black">
     <Hero />
+    <GoldBorder />
     <Partners />
+    <GoldBorder />
     <About />
+    <GoldBorder />
     <DubaiLifestyle />
+    <GoldBorder />
     <Services />
+    <GoldBorder />
     <WealthArchitecture />
+    <GoldBorder />
     <RealEstate />
+    <GoldBorder />
     <FeaturedDevelopments />
+    <GoldBorder />
     <MarketUpdate />
+    <GoldBorder />
     <Contact />
-  </>
+  </div>
 );
 
 function App() {
   return (
-    <VideoProvider>
-      <LanguageProvider>
-        <Router>
-          <div className="bg-black font-sans selection:bg-[#D4AF37] selection:text-black overflow-x-hidden relative w-full min-h-screen flex flex-col">
-            <Navbar />
-            
-            <div className="fixed inset-0 z-0 pointer-events-none">
-              <BackgroundEffect color="#D4AF37" opacity={0.05} />
-            </div>
-
-            <main className="relative z-10 flex-grow">
-              <Suspense fallback={<div className="h-screen bg-black flex items-center justify-center text-[#D4AF37]">Loading...</div>}>
-                <Routes>
-                  <Route path="/" element={<Home />} />
-                  <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-                  <Route path="/terms-conditions" element={<TermsConditions />} />
-                  <Route path="/faq" element={<FAQ />} />
-                  <Route path="*" element={<Home />} />
-                </Routes>
-              </Suspense>
-            </main>
-
-            <Footer />
-          </div>
-        </Router>
-      </LanguageProvider>
-    </VideoProvider>
+    <LanguageProvider>
+      <Router>
+        <div className="bg-black font-sans selection:bg-[#D4AF37] selection:text-black overflow-x-hidden w-full min-h-screen">
+          <Navbar />
+          <main>
+            <Suspense fallback={<div className="h-screen bg-black flex items-center justify-center text-[#D4AF37]">Loading MAPSTONE...</div>}>
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+                <Route path="/terms-conditions" element={<TermsConditions />} />
+                <Route path="/faq" element={<FAQ />} />
+                <Route path="*" element={<Home />} />
+              </Routes>
+            </Suspense>
+          </main>
+          <Footer />
+        </div>
+      </Router>
+    </LanguageProvider>
   );
 }
 

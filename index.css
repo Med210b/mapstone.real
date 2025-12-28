@@ -1,0 +1,45 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --gold: #D4AF37;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  background-color: black;
+  width: 100%;
+  overflow-x: hidden;
+  font-family: 'Times New Roman', serif;
+}
+
+/* Remove gaps between sections and ensure they fit mobile screens */
+section {
+  margin: 0 !important;
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+  width: 100%;
+  position: relative;
+}
+
+@media (max-width: 768px) {
+  section {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+  }
+}
+
+/* Custom Scrollbar for a luxury feel */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #000;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--gold);
+  border-radius: 4px;
+}
