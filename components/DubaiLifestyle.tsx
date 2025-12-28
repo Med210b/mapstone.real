@@ -27,8 +27,8 @@ const DubaiLifestyle: React.FC = () => {
       title: "Where the world meets.", 
       description: "Dubai offers unmatched global access, linking investors to Europe, Asia, and the Americas within hours. A city built for mobility, business, and limitless expansion.", 
       btnText: "Discover Connectivity",
-      // FIXED: New image showing Highway/Movement/Connectivity (Sheikh Zayed Road)
-      image: "https://images.unsplash.com/photo-1512632500433-372a9b87e6da?q=80&w=2070&auto=format&fit=crop" 
+      // Image 1: Map/Connectivity
+      image: "https://i.postimg.cc/1trhgtbr/4c9b0eceaa0bdf1cb31220cef95c81ca.jpg" 
     },
     { 
       id: 2, 
@@ -36,7 +36,8 @@ const DubaiLifestyle: React.FC = () => {
       title: "A financial environment designed for growth.", 
       description: "With zero income tax and investor‑friendly regulations, Dubai empowers individuals and businesses to build wealth efficiently and securely.", 
       btnText: "Discover Tax-Free Living",
-      image: "https://images.unsplash.com/photo-1559586616-361e18714958?q=80&w=2674&auto=format&fit=crop" 
+      // Image 2: Luxury/Interior
+      image: "https://i.postimg.cc/nzGbszNq/e7cb459dd24231da6c2bb82db27e78e1.jpg" 
     },
     { 
       id: 3, 
@@ -44,7 +45,8 @@ const DubaiLifestyle: React.FC = () => {
       title: "A safe, resilient, future‑focused nation.", 
       description: "Dubai’s political stability, strong governance, and long-term vision create one of the world’s most secure environments for living and investing.", 
       btnText: "Discover Stability",
-      image: "https://images.unsplash.com/photo-1518684079-3c830dcef090?q=80&w=2069&auto=format&fit=crop" 
+      // Image 3: Future City/Stability
+      image: "https://i.postimg.cc/Y9zK49TN/5dea051ac81c7db32a7b813db7631fca.jpg" 
     }
   ];
 
