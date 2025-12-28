@@ -1,173 +1,450 @@
-import React, { useState, useRef } from 'react';
-import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
-import { 
-  TrendingUp, Key, Layout, MapPin, Award, Landmark, 
-  Briefcase, BarChart3, Gavel, LogOut, Users, Shield, ArrowRight 
-} from 'lucide-react';
-import SectionTitle from './SectionTitle';
+"use client"
 
-interface ServiceBookProps {
-  service: {
-    icon: React.ReactNode;
-    title: string;
-    headline: string;
-    desc: string;
-  };
+import React, { useRef, useState } from "react"
+import { motion, useMotionValue, useSpring, useTransform, useScroll, type MotionValue } from "framer-motion"
+
+// ==================== ANIMATED BACKGROUND ====================
+function AnimatedBackground() {
+  return (
+    <div className="absolute inset-0 -z-10 overflow-hidden">
+      {/* Animated flowing lines */}
+      <svg className="absolute inset-0 h-full w-full" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="services-grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style={{ stopColor: "#8B4513", stopOpacity: 0.3 }} />
+            <stop offset="100%" style={{ stopColor: "#d4af37", stopOpacity: 0.1 }} />
+          </linearGradient>
+          <linearGradient id="services-grad2" x1="100%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" style={{ stopColor: "#A0522D", stopOpacity: 0.25 }} />
+            <stop offset="100%" style={{ stopColor: "#6B3410", stopOpacity: 0.15 }} />
+          </linearGradient>
+        </defs>
+
+        {/* Line 1 */}
+        <path
+          d="M-100,200 Q200,100 500,300 T1100,400"
+          stroke="url(#services-grad1)"
+          strokeWidth="2"
+          fill="none"
+          className="services-animate-flow-1"
+        />
+
+        {/* Line 2 */}
+        <path
+          d="M-50,400 Q300,250 700,500 T1300,600"
+          stroke="url(#services-grad2)"
+          strokeWidth="1.5"
+          fill="none"
+          className="services-animate-flow-2"
+        />
+
+        {/* Line 3 */}
+        <path
+          d="M1500,100 Q1200,300 800,200 T100,400"
+          stroke="url(#services-grad1)"
+          strokeWidth="2"
+          fill="none"
+          className="services-animate-flow-3"
+        />
+
+        {/* Line 4 */}
+        <path
+          d="M-200,600 Q100,450 600,700 T1200,800"
+          stroke="#d4af37"
+          strokeWidth="1"
+          fill="none"
+          opacity="0.2"
+          className="services-animate-flow-4"
+        />
+
+        {/* Line 5 */}
+        <path
+          d="M1400,300 Q1000,500 500,400 T-100,600"
+          stroke="#8B6914"
+          strokeWidth="1.5"
+          fill="none"
+          opacity="0.25"
+          className="services-animate-flow-1"
+        />
+
+        {/* Line 6 */}
+        <path
+          d="M-150,50 Q400,200 900,100 T1500,300"
+          stroke="#654321"
+          strokeWidth="1"
+          fill="none"
+          opacity="0.2"
+          className="services-animate-flow-3"
+        />
+
+        {/* Line 7 */}
+        <path
+          d="M1600,500 Q1100,600 600,550 T0,700"
+          stroke="url(#services-grad2)"
+          strokeWidth="2"
+          fill="none"
+          className="services-animate-flow-2"
+        />
+
+        {/* Line 8 */}
+        <path
+          d="M-300,300 Q200,400 800,250 T1400,500"
+          stroke="#A0522D"
+          strokeWidth="1.5"
+          fill="none"
+          opacity="0.3"
+          className="services-animate-flow-4"
+        />
+      </svg>
+    </div>
+  )
 }
 
-const ServiceBook: React.FC<ServiceBookProps> = ({ service }) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
+// ==================== CONTAINER SCROLL ====================
+const ContainerScroll = ({
+  titleComponent,
+  children,
+}: {
+  titleComponent: string | React.ReactNode
+  children: React.ReactNode
+}) => {
+  const containerRef = useRef<HTMLDivElement>(null)
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+  })
+  const [isMobile, setIsMobile] = useState(false)
 
-  // Mouse Tracking for 3D Tilt
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
+  React.useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768)
+    }
+    checkMobile()
+    window.addEventListener("resize", checkMobile)
+    return () => {
+      window.removeEventListener("resize", checkMobile)
+    }
+  }, [])
 
-  const mouseXSpring = useSpring(x);
-  const mouseYSpring = useSpring(y);
+  const scaleDimensions = () => {
+    return isMobile ? [0.7, 0.9] : [1.05, 1]
+  }
 
-  // Rotation values for the parallax tilt
-  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["10deg", "-10deg"]);
-  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-10deg", "10deg"]);
-
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (!containerRef.current || isOpen) return;
-    const rect = containerRef.current.getBoundingClientRect();
-    const width = rect.width;
-    const height = rect.height;
-    const mouseX = e.clientX - rect.left;
-    const mouseY = e.clientY - rect.top;
-    const xPct = mouseX / width - 0.5;
-    const yPct = mouseY / height - 0.5;
-    x.set(xPct);
-    y.set(yPct);
-  };
-
-  const handleMouseLeave = () => {
-    x.set(0);
-    y.set(0);
-    setIsOpen(false);
-  };
+  const rotate = useTransform(scrollYProgress, [0, 1], [20, 0])
+  const scale = useTransform(scrollYProgress, [0, 1], scaleDimensions())
+  const translate = useTransform(scrollYProgress, [0, 1], [0, -100])
 
   return (
-    <div 
-      ref={containerRef}
-      className="relative h-[320px] w-full perspective-[1500px] group cursor-pointer"
-      onMouseMove={handleMouseMove}
-      onMouseEnter={() => setIsOpen(true)}
-      onMouseLeave={handleMouseLeave}
-    >
-      <motion.div
-        className="relative w-full h-full transition-all duration-500"
-        style={{ 
-          transformStyle: "preserve-3d",
-          rotateX: isOpen ? 0 : rotateX,
-          rotateY: isOpen ? -145 : rotateY,
+    <div className="h-[60rem] md:h-[80rem] flex items-center justify-center relative p-2 md:p-20" ref={containerRef}>
+      <div
+        className="py-10 md:py-40 w-full relative"
+        style={{
+          perspective: "1000px",
         }}
-        transition={{ type: "spring", stiffness: 60, damping: 12 }}
       >
-        {/* --- BOOK SPINE (Adds 3D depth to the edge) --- */}
-        <div 
-          className="absolute left-0 top-0 bottom-0 w-[40px] bg-[#631717] origin-left"
-          style={{ 
-            transform: "rotateY(-90deg) translateX(-20px)",
-            backfaceVisibility: "hidden"
-          }} 
-        />
-
-        {/* --- BOOK COVER (FRONT) --- */}
-        <div 
-          className="absolute inset-0 z-20 backface-hidden rounded-r-lg shadow-[20px_0_50px_rgba(0,0,0,0.5)] flex flex-col justify-between p-6 border-l-4 border-black/30"
-          style={{ 
-            backgroundColor: "#8B2020", 
-            backfaceVisibility: "hidden",
-          }}
-        >
-          <div className="text-white/90">
-            {React.cloneElement(service.icon as React.ReactElement, { size: 32, strokeWidth: 1.5 })}
-            <h4 className="mt-4 text-[9px] tracking-[0.3em] uppercase text-white/40 font-sans">Bespoke Advisory</h4>
-          </div>
-          
-          <div>
-            <h3 className="text-xl font-header text-white leading-tight drop-shadow-md">{service.title}</h3>
-            <div className="mt-4 flex items-center gap-2 text-white/40 text-[9px] uppercase tracking-[0.2em] group-hover:text-white/80 transition-colors">
-              <span>View Briefing</span>
-              <ArrowRight size={10} className="group-hover:translate-x-1 transition-transform" />
-            </div>
-          </div>
-        </div>
-
-        {/* --- INSIDE LEFT PAGE (Back of Cover) --- */}
-        <div 
-          className="absolute inset-0 z-10 rounded-l-lg p-8 flex flex-col justify-center border border-white/5"
-          style={{ 
-            backgroundColor: "#1a1a1a",
-            transform: "rotateY(180deg)",
-            backfaceVisibility: "hidden"
-          }}
-        >
-          <div className="h-full w-full border border-[#D4AF37]/20 p-4 rounded flex flex-col justify-between">
-             <div className="w-10 h-1 bg-[#8B2020]" />
-             <div className="space-y-2">
-                <p className="text-[#D4AF37] text-[8px] tracking-[0.3em] uppercase opacity-50">Mapstone Intelligence</p>
-                <div className="h-px w-full bg-gradient-to-r from-[#D4AF37]/40 to-transparent" />
-             </div>
-          </div>
-        </div>
-      </motion.div>
-
-      {/* --- PAGE STACK (The Thickness) --- */}
-      <div 
-        className="absolute inset-y-2 right-[-4px] w-2 bg-zinc-300 rounded-sm opacity-20"
-        style={{ transform: "translateZ(-1px)" }}
-      />
-
-      {/* --- INSIDE RIGHT PAGE (The Content) --- */}
-      <div className="absolute inset-0 z-0 bg-[#0f0f0f] rounded-r-lg shadow-inner p-8 flex flex-col justify-center border border-white/10 overflow-hidden">
-        <div className="absolute top-0 right-0 w-32 h-32 bg-[#8B2020]/5 blur-3xl rounded-full -mr-16 -mt-16" />
-        <h3 className="text-[#D4AF37] text-base font-header mb-4 leading-tight relative z-10">
-          {service.headline}
-        </h3>
-        <p className="text-gray-400 text-xs leading-relaxed font-body relative z-10">
-          {service.desc}
-        </p>
+        <Header translate={translate} titleComponent={titleComponent} />
+        <Card rotate={rotate} translate={translate} scale={scale}>
+          {children}
+        </Card>
       </div>
     </div>
-  );
-};
+  )
+}
 
-const Services: React.FC = () => {
-  const bespokeServices = [
-    { icon: <TrendingUp />, title: "Investment Advisory", headline: "Strategies engineered for long-term wealth", desc: "We analyze market cycles, developer performance, and emerging districts to curate investment paths aligned with your financial goals." },
-    { icon: <Key />, title: "Off‑Market Access", headline: "Exclusive opportunities beyond the public market", desc: "Through private developer relationships, we secure VIP allocations, pre‑launch pricing, and confidential acquisitions." },
-    { icon: <Layout />, title: "Portfolio Architecture", headline: "Building assets that grow with you", desc: "We design real estate portfolios that balance luxury, performance, and legacy across Dubai’s most promising districts." },
-    { icon: <MapPin />, title: "Relocation & Lifestyle", headline: "A seamless transition into Dubai living", desc: "From Golden Visa guidance to community selection, we support clients in creating a lifestyle that reflects their ambitions." },
-    { icon: <Award />, title: "Developer Relations", headline: "Priority entry into elite launches", desc: "Our partnerships with top developers unlock early access to premium units and exclusive investment windows." },
-    { icon: <Landmark />, title: "Golden Visa Facilitation", headline: "Residency pathways for global investors", desc: "We streamline the entire Golden Visa process, ensuring a smooth transition into long-term residency." },
-    { icon: <Briefcase />, title: "Property Management", headline: "Your asset, fully managed", desc: "From tenant screening to short‑term rental optimization, we maximize returns while maintaining MAPSTONE‑level standards." },
-    { icon: <BarChart3 />, title: "Market Intelligence", headline: "Insights that drive smarter decisions", desc: "We deliver bespoke reports covering price trends, ROI forecasts, and district performance." },
-    { icon: <Gavel />, title: "Legal & Transaction Support", headline: "Secure, transparent, compliant", desc: "Our legal partners handle contracts, due diligence, and regulatory requirements with precision." },
-    { icon: <LogOut />, title: "Asset Exit Strategy", headline: "Maximizing value when it’s time to sell", desc: "We craft resale strategies based on market timing, buyer demand, and appreciation cycles." },
-    { icon: <Users />, title: "Corporate Relocation", headline: "Tailored solutions for global teams", desc: "We source premium residences and manage onboarding for executives relocating to Dubai." },
-    { icon: <Shield />, title: "Wealth & Legacy Planning", headline: "Structuring assets for generational impact", desc: "We align your real estate portfolio with long-term family and wealth objectives." }
-  ];
+const Header = ({ translate, titleComponent }: any) => {
+  return (
+    <motion.div
+      style={{
+        translateY: translate,
+      }}
+      className="div max-w-5xl mx-auto text-center"
+    >
+      {titleComponent}
+    </motion.div>
+  )
+}
+
+const Card = ({
+  rotate,
+  scale,
+  children,
+}: {
+  rotate: MotionValue<number>
+  scale: MotionValue<number>
+  translate: MotionValue<number>
+  children: React.ReactNode
+}) => {
+  return (
+    <motion.div
+      style={{
+        rotateX: rotate,
+        scale,
+        boxShadow:
+          "0 0 #0000004d, 0 9px 20px #0000004a, 0 37px 37px #00000042, 0 84px 50px #00000026, 0 149px 60px #0000000a, 0 233px 65px #00000003",
+      }}
+      className="max-w-7xl -mt-12 mx-auto h-[30rem] md:h-[40rem] w-full border-4 border-[#d4af37]/30 p-2 md:p-6 bg-zinc-950 rounded-[30px] shadow-2xl"
+    >
+      <div className="h-full w-full overflow-hidden rounded-2xl bg-black md:rounded-2xl md:p-4">{children}</div>
+    </motion.div>
+  )
+}
+
+// ==================== SERVICES DATA ====================
+const services = [
+  {
+    title: "Strategies engineered for long-term wealth",
+    description:
+      "We aim to enhance returns, accelerate performance, and encourage progress by creating investment plans aligned with your objectives.",
+  },
+  {
+    title: "Exclusive opportunities beyond the public market",
+    description:
+      "Through private investments opportunities, we access M&A transactions, pre-launch equity, and institutional-only offerings.",
+  },
+  {
+    title: "Banking more than your cash you",
+    description:
+      "We facilitate real estate portfolios that balance luxury, performance, and legacy across multiple asset generation.",
+  },
+  {
+    title: "A seamless transition into Dubai living",
+    description:
+      "From visas to residence to investments, relocation, we support clients navigating a lifestyle and relocation experience.",
+  },
+  {
+    title: "Priority entry into elite branches",
+    description:
+      "Our relationships with top tier private banks wealth services, at boutique firms and exclusive family offices, white-glove services.",
+  },
+  {
+    title: "Roadmaps pathways for global investors",
+    description:
+      "Tax-efficiency, the right structure between high-growth, security, liquidity needs and tax optimization around complex tax landscape.",
+  },
+  {
+    title: "Your asset, fully managed",
+    description:
+      "From strategy to execution, transactions, diversification, and monitoring — we facilitate legacy-level opportunities for the select high-net-worth clientele.",
+  },
+  {
+    title: "Insights that drive smarter decisions",
+    description:
+      "Regular briefing and real-time intel built for proactive, security-forward asset allocation for informed wealth preservation.",
+  },
+  {
+    title: "Estate, immigration, compliance",
+    description:
+      "Our trusted advisors deliver end-to-end estate, immigration, immigration, and regulatory support services.",
+  },
+  {
+    title: "Maximizing value when it's time to sell",
+    description:
+      "Our specialized trade execution services — financial timing, buyer selection, and sophisticated negotiation strategies.",
+  },
+  {
+    title: "Tailored solutions for global teams",
+    description:
+      "Streamline administration to deliver advanced administrative infrastructure for comprehensive administration in return.",
+  },
+  {
+    title: "Storytelling made for generational impact",
+    description:
+      "From philanthropy to businesses to trust portfolio building, we engaged stories and sophisticated personal branding.",
+  },
+]
+
+// ==================== TILT CARD ====================
+function TiltCard({
+  title,
+  description,
+  index,
+}: {
+  title: string
+  description: string
+  index: number
+}) {
+  const cardRef = useRef<HTMLDivElement>(null)
+  const mouseX = useMotionValue(0)
+  const mouseY = useMotionValue(0)
+
+  // Smooth spring animations for natural motion
+  const rotateX = useSpring(useTransform(mouseY, [-0.5, 0.5], [15, -15]), {
+    stiffness: 200,
+    damping: 20,
+  })
+  const rotateY = useSpring(useTransform(mouseX, [-0.5, 0.5], [-15, 15]), {
+    stiffness: 200,
+    damping: 20,
+  })
+
+  // Layered depth for parallax effect
+  const titleZ = useSpring(useTransform(mouseX, [-0.5, 0.5], [0, 20]), {
+    stiffness: 200,
+    damping: 20,
+  })
+  const descZ = useSpring(useTransform(mouseX, [-0.5, 0.5], [0, 10]), {
+    stiffness: 200,
+    damping: 20,
+  })
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!cardRef.current) return
+    const rect = cardRef.current.getBoundingClientRect()
+    const width = rect.width
+    const height = rect.height
+    const x = (e.clientX - rect.left) / width - 0.5
+    const y = (e.clientY - rect.top) / height - 0.5
+    mouseX.set(x)
+    mouseY.set(y)
+  }
+
+  const handleMouseLeave = () => {
+    mouseX.set(0)
+    mouseY.set(0)
+  }
 
   return (
-    <section id="services" className="bg-black text-white py-24 overflow-hidden border-b border-[#D4AF37]/30">
-      <div className="container mx-auto px-6">
-        <SectionTitle 
-          title="Bespoke Solutions" 
-          subtitle="Tailored services crafted for discerning investors." 
-          light 
-        />
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-12 gap-y-20 mt-20">
-          {bespokeServices.map((service, i) => (
-            <ServiceBook key={i} service={service} />
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-};
+    <motion.div
+      ref={cardRef}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: index * 0.05, duration: 0.5 }}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      style={{
+        rotateX,
+        rotateY,
+        transformStyle: "preserve-3d",
+      }}
+      whileHover={{ scale: 1.03 }}
+      className="group relative"
+    >
+      <div
+        className="relative h-full overflow-hidden rounded-lg border border-zinc-800/80 bg-zinc-950/95 p-8 backdrop-blur-sm transition-all duration-500 hover:border-[#d4af37]/50 hover:bg-zinc-900/95 hover:shadow-[0_0_50px_rgba(212,175,55,0.2),0_25px_50px_rgba(0,0,0,0.5)]"
+        style={{
+          transform: "translateZ(40px)",
+          transformStyle: "preserve-3d",
+        }}
+      >
+        {/* Title layer with deeper Z-depth */}
+        <motion.h3
+          className="mb-4 text-pretty text-lg font-medium leading-snug text-[#d4af37]"
+          style={{
+            translateZ: titleZ,
+            transformStyle: "preserve-3d",
+          }}
+        >
+          {title}
+        </motion.h3>
 
-export default Services;
+        {/* Description layer with moderate Z-depth */}
+        <motion.p
+          className="text-pretty text-sm leading-relaxed text-zinc-300"
+          style={{
+            translateZ: descZ,
+            transformStyle: "preserve-3d",
+          }}
+        >
+          {description}
+        </motion.p>
+
+        {/* Glow effect on hover */}
+        <div
+          className="pointer-events-none absolute inset-0 rounded-lg opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+          style={{
+            background: "radial-gradient(circle at center, rgba(212,175,55,0.05) 0%, transparent 70%)",
+          }}
+        />
+      </div>
+    </motion.div>
+  )
+}
+
+// ==================== MAIN COMPONENT ====================
+export default function Services() {
+  return (
+    <section className="relative min-h-screen bg-gradient-to-br from-black via-[#0f0808] to-black overflow-hidden">
+      <AnimatedBackground />
+      <ContainerScroll
+        titleComponent={
+          <div className="mb-16 text-center">
+            <p className="mb-3 text-sm font-medium tracking-[0.2em] text-[#d4af37]">
+              TAILORED SERVICES CRAFTED FOR DISCERNING INVESTORS
+            </p>
+            <h1 className="text-balance text-5xl font-light text-white md:text-6xl">Bespoke Solutions</h1>
+            <div className="mx-auto mt-4 h-[2px] w-32 bg-gradient-to-r from-transparent via-[#d4af37] to-transparent" />
+          </div>
+        }
+      >
+        <div className="w-full h-full bg-black p-8 overflow-y-auto">
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
+            {services.map((service, index) => (
+              <TiltCard key={index} title={service.title} description={service.description} index={index} />
+            ))}
+          </div>
+        </div>
+      </ContainerScroll>
+
+      <style jsx>{`
+        @keyframes services-flow-1 {
+          0%, 100% {
+            transform: translateX(0) translateY(0) rotate(0deg);
+            opacity: 0.3;
+          }
+          50% {
+            transform: translateX(30px) translateY(-20px) rotate(2deg);
+            opacity: 0.5;
+          }
+        }
+
+        @keyframes services-flow-2 {
+          0%, 100% {
+            transform: translateX(0) translateY(0) rotate(0deg);
+            opacity: 0.25;
+          }
+          50% {
+            transform: translateX(-40px) translateY(30px) rotate(-3deg);
+            opacity: 0.4;
+          }
+        }
+
+        @keyframes services-flow-3 {
+          0%, 100% {
+            transform: translateX(0) translateY(0) rotate(0deg);
+            opacity: 0.2;
+          }
+          50% {
+            transform: translateX(50px) translateY(25px) rotate(1deg);
+            opacity: 0.35;
+          }
+        }
+
+        @keyframes services-flow-4 {
+          0%, 100% {
+            transform: translateX(0) translateY(0) rotate(0deg);
+            opacity: 0.3;
+          }
+          50% {
+            transform: translateX(-30px) translateY(-35px) rotate(-2deg);
+            opacity: 0.45;
+          }
+        }
+
+        .services-animate-flow-1 {
+          animation: services-flow-1 25s ease-in-out infinite;
+        }
+
+        .services-animate-flow-2 {
+          animation: services-flow-2 30s ease-in-out infinite;
+        }
+
+        .services-animate-flow-3 {
+          animation: services-flow-3 20s ease-in-out infinite;
+        }
+
+        .services-animate-flow-4 {
+          animation: services-flow-4 28s ease-in-out infinite;
+        }
+      `}</style>
+    </section>
+  )
+}
