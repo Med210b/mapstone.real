@@ -10,10 +10,9 @@ const Preloader: React.FC<PreloaderProps> = ({ onComplete }) => {
 
   useEffect(() => {
     // ----------------------------------------------------
-    // SETTING: How long to show the video (in milliseconds)
-    // 5000 = 5 seconds. Change this if your video is shorter/longer.
+    // UPDATED: Set to 6000ms (6 seconds) to match your video
     // ----------------------------------------------------
-    const VIDEO_DURATION = 5000;
+    const VIDEO_DURATION = 6000;
 
     const timer = setTimeout(() => {
       setIsExiting(true);
@@ -31,9 +30,8 @@ const Preloader: React.FC<PreloaderProps> = ({ onComplete }) => {
       className="fixed inset-0 z-[9999] bg-black flex items-center justify-center overflow-hidden"
     >
       <div className="relative w-full h-full pointer-events-none select-none">
-        {/* pointer-events-none prevents clicking on the video */}
         <iframe
-          className="w-full h-full object-cover scale-110" // scale-110 zooms in slightly to hide edges
+          className="w-full h-full object-cover scale-110" 
           src="https://www.youtube.com/embed/c25azKgBa70?autoplay=1&mute=1&controls=0&showinfo=0&rel=0&loop=1&playlist=c25azKgBa70&modestbranding=1&disablekb=1"
           title="Preloader"
           frameBorder="0"
