@@ -2,12 +2,15 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 
-// Enhanced Glow Button with smoother interaction
-const GlowButton: React.FC<{ text: string }> = ({ text }) => (
-  <motion.button
+// Enhanced Glow Button that acts as a Link
+const GlowButton: React.FC<{ text: string; link: string }> = ({ text, link }) => (
+  <motion.a
+    href={link}
+    target="_blank"
+    rel="noopener noreferrer"
     whileHover={{ scale: 1.02 }}
     whileTap={{ scale: 0.98 }}
-    className="relative group px-10 py-4 rounded-full bg-transparent border border-[#D4AF37]/30 text-[#D4AF37] text-sm font-medium tracking-[0.2em] uppercase overflow-hidden transition-all duration-500 hover:border-[#D4AF37]"
+    className="inline-block relative group px-10 py-4 rounded-full bg-transparent border border-[#D4AF37]/30 text-[#D4AF37] text-sm font-medium tracking-[0.2em] uppercase overflow-hidden transition-all duration-500 hover:border-[#D4AF37] cursor-pointer"
   >
     {/* Background Sweep Effect */}
     <div className="absolute inset-0 bg-[#D4AF37] translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out opacity-10" />
@@ -16,7 +19,7 @@ const GlowButton: React.FC<{ text: string }> = ({ text }) => (
       {text}
       <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
     </div>
-  </motion.button>
+  </motion.a>
 );
 
 const DubaiLifestyle: React.FC = () => {
@@ -27,8 +30,9 @@ const DubaiLifestyle: React.FC = () => {
       title: "Where the world meets.", 
       description: "Dubai offers unmatched global access, linking investors to Europe, Asia, and the Americas within hours. A city built for mobility, business, and limitless expansion.", 
       btnText: "Discover Connectivity",
-      // Image 1: Map/Connectivity
-      image: "https://i.postimg.cc/1trhgtbr/4c9b0eceaa0bdf1cb31220cef95c81ca.jpg" 
+      image: "https://i.postimg.cc/1trhgtbr/4c9b0eceaa0bdf1cb31220cef95c81ca.jpg",
+      // ADDED: YouTube Short URL 1
+      videoUrl: "https://youtube.com/shorts/gCYk9PQ_hVY?si=FZg8hUrSSAGUTIKv"
     },
     { 
       id: 2, 
@@ -36,8 +40,9 @@ const DubaiLifestyle: React.FC = () => {
       title: "A financial environment designed for growth.", 
       description: "With zero income tax and investor‑friendly regulations, Dubai empowers individuals and businesses to build wealth efficiently and securely.", 
       btnText: "Discover Tax-Free Living",
-      // Image 2: Luxury/Interior
-      image: "https://i.postimg.cc/nzGbszNq/e7cb459dd24231da6c2bb82db27e78e1.jpg" 
+      image: "https://i.postimg.cc/nzGbszNq/e7cb459dd24231da6c2bb82db27e78e1.jpg",
+      // ADDED: YouTube Short URL 2
+      videoUrl: "https://youtube.com/shorts/33eoZgak3P4?si=RPlxtmBU0SeZaEJh"
     },
     { 
       id: 3, 
@@ -45,8 +50,9 @@ const DubaiLifestyle: React.FC = () => {
       title: "A safe, resilient, future‑focused nation.", 
       description: "Dubai’s political stability, strong governance, and long-term vision create one of the world’s most secure environments for living and investing.", 
       btnText: "Discover Stability",
-      // Image 3: Future City/Stability
-      image: "https://i.postimg.cc/Y9zK49TN/5dea051ac81c7db32a7b813db7631fca.jpg" 
+      image: "https://i.postimg.cc/Y9zK49TN/5dea051ac81c7db32a7b813db7631fca.jpg",
+      // ADDED: YouTube Short URL 3
+      videoUrl: "https://youtube.com/shorts/33eoZgak3P4?si=yKJ1_9JoIZ6wJgn-"
     }
   ];
 
@@ -109,7 +115,8 @@ const DubaiLifestyle: React.FC = () => {
                 </p>
                 
                 <div className="pt-6">
-                  <GlowButton text={feature.btnText} />
+                  {/* PASSING THE LINK TO THE BUTTON */}
+                  <GlowButton text={feature.btnText} link={feature.videoUrl} />
                 </div>
               </motion.div>
               
@@ -139,8 +146,6 @@ const DubaiLifestyle: React.FC = () => {
                     
                     {/* Inner Shadow/Vignette */}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/20 z-10" />
-
-                    {/* REMOVED: View Details Hover Text */}
 
                   </div>
 
