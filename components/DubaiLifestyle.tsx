@@ -1,24 +1,21 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { ArrowRight, Globe, Shield, Wallet } from 'lucide-react';
-import ReactPlayer from 'react-player';
+import { ArrowRight } from 'lucide-react';
 
-// Custom Futuristic Glow Button Component
+// Enhanced Glow Button with smoother interaction
 const GlowButton: React.FC<{ text: string }> = ({ text }) => (
   <motion.button
-    whileHover={{ scale: 1.05 }}
+    whileHover={{ scale: 1.02 }}
     whileTap={{ scale: 0.98 }}
-    className="relative group px-8 py-3 rounded-full bg-transparent border border-[#D4AF37]/50 text-[#D4AF37] text-sm tracking-widest uppercase overflow-hidden transition-all duration-300"
+    className="relative group px-10 py-4 rounded-full bg-transparent border border-[#D4AF37]/30 text-[#D4AF37] text-sm font-medium tracking-[0.2em] uppercase overflow-hidden transition-all duration-500 hover:border-[#D4AF37]"
   >
-    <div className="absolute inset-0 bg-[#D4AF37]/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-    <div className="absolute -inset-[1px] rounded-full bg-gradient-to-r from-transparent via-[#D4AF37]/40 to-transparent opacity-0 group-hover:opacity-100 blur-sm transition-opacity duration-500" />
+    {/* Background Sweep Effect */}
+    <div className="absolute inset-0 bg-[#D4AF37] translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out opacity-10" />
     
-    <div className="relative flex items-center gap-3">
+    <div className="relative flex items-center gap-4 z-10">
       {text}
-      <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+      <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
     </div>
-
-    <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-3/4 h-4 bg-[#D4AF37]/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
   </motion.button>
 );
 
@@ -30,7 +27,8 @@ const DubaiLifestyle: React.FC = () => {
       title: "Where the world meets.", 
       description: "Dubai offers unmatched global access, linking investors to Europe, Asia, and the Americas within hours. A city built for mobility, business, and limitless expansion.", 
       btnText: "Discover Connectivity",
-      videoUrl: "https://www.youtube.com/watch?v=gCYk9PQ_hVY" 
+      // Replaced with a high-quality Dubai Skyline/Connectivity image
+      image: "https://images.unsplash.com/photo-1512453979798-5ea90b2009f4?q=80&w=2070&auto=format&fit=crop" 
     },
     { 
       id: 2, 
@@ -38,7 +36,8 @@ const DubaiLifestyle: React.FC = () => {
       title: "A financial environment designed for growth.", 
       description: "With zero income tax and investor‑friendly regulations, Dubai empowers individuals and businesses to build wealth efficiently and securely.", 
       btnText: "Discover Tax-Free Living",
-      videoUrl: "https://www.youtube.com/watch?v=33eoZgak3P4" 
+      // Replaced with a Luxury/Wealth aesthetic image
+      image: "https://images.unsplash.com/photo-1559586616-361e18714958?q=80&w=2674&auto=format&fit=crop" 
     },
     { 
       id: 3, 
@@ -46,114 +45,114 @@ const DubaiLifestyle: React.FC = () => {
       title: "A safe, resilient, future‑focused nation.", 
       description: "Dubai’s political stability, strong governance, and long-term vision create one of the world’s most secure environments for living and investing.", 
       btnText: "Discover Stability",
-      videoUrl: "https://www.youtube.com/watch?v=E_re8P7kthk" 
+      // Replaced with a Safety/Future City image
+      image: "https://images.unsplash.com/photo-1518684079-3c830dcef090?q=80&w=2069&auto=format&fit=crop" 
     }
   ];
 
   return (
-    <section className="py-16 md:py-32 bg-black text-white overflow-hidden relative border-t border-[#D4AF37]/30">
+    <section className="py-20 md:py-40 bg-[#050505] text-white overflow-hidden relative border-t border-[#D4AF37]/20">
+      {/* Cinematic Background Gradient */}
+      <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-[#D4AF37]/5 via-black to-black pointer-events-none" />
+
       <div className="container mx-auto px-6 relative z-10">
+        
         {/* Section Header */}
-        <div className="mb-16 md:mb-24 text-center max-w-4xl mx-auto">
-          <motion.p 
-            initial={{ opacity: 0, y: 20 }} 
+        <div className="mb-24 md:mb-40 text-center max-w-4xl mx-auto">
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }} 
             whileInView={{ opacity: 1, y: 0 }} 
-            viewport={{ once: true }} 
-            className="text-[#D4AF37] text-sm tracking-[0.3em] uppercase mb-4 font-subtitle"
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
           >
-            ADVANTAGES
-          </motion.p>
-          <motion.h2 
-            initial={{ opacity: 0, y: 20 }} 
-            whileInView={{ opacity: 1, y: 0 }} 
-            viewport={{ once: true }} 
-            transition={{ delay: 0.1 }} 
-            className="text-3xl md:text-6xl font-header font-bold mb-6"
-          >
-            Global Standard
-          </motion.h2>
-          <motion.p 
-            initial={{ opacity: 0 }} 
-            whileInView={{ opacity: 1 }} 
-            viewport={{ once: true }} 
-            transition={{ delay: 0.2 }} 
-            className="text-gray-400 font-body text-lg leading-relaxed"
-          >
-            A world-class destination for wealth, lifestyle, and opportunity.
-          </motion.p>
+            <span className="text-[#D4AF37] text-xs md:text-sm tracking-[0.4em] uppercase font-semibold block mb-6">
+              The Dubai Advantage
+            </span>
+            <h2 className="text-4xl md:text-7xl font-bold mb-8 leading-tight tracking-tight bg-clip-text text-transparent bg-gradient-to-b from-white via-white to-white/50">
+              Global Standard
+            </h2>
+            <div className="h-1 w-24 bg-[#D4AF37] mx-auto mb-8 rounded-full" />
+            <p className="text-gray-400 text-lg md:text-xl leading-relaxed max-w-2xl mx-auto font-light">
+              A world-class destination defining the future of wealth, lifestyle, and opportunity.
+            </p>
+          </motion.div>
         </div>
 
         {/* Feature Sections */}
-        <div className="space-y-16 md:space-y-32">
+        <div className="space-y-32 md:space-y-48">
           {features.map((feature, index) => (
             <div 
               key={feature.id} 
-              className={`flex flex-col ${index % 2 === 1 ? 'md:flex-row-reverse' : 'md:flex-row'} items-center gap-8 md:gap-24`}
+              className={`flex flex-col ${index % 2 === 1 ? 'md:flex-row-reverse' : 'md:flex-row'} items-center gap-12 md:gap-24 lg:gap-32`}
             >
+              
               {/* Text Content */}
               <motion.div 
                 initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }} 
                 whileInView={{ opacity: 1, x: 0 }} 
-                viewport={{ once: true }} 
-                className="flex-1 space-y-6 md:space-y-8"
+                viewport={{ once: true, margin: "-15%" }}
+                transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
+                className="flex-1 space-y-8 md:space-y-10"
               >
-                <div className="flex items-center gap-4 mb-4">
-                  <span className="text-[#D4AF37] font-mono text-sm">0{feature.id}</span>
-                  <div className="h-[1px] w-12 bg-[#D4AF37]" />
-                  <span className="text-gray-400 text-xs tracking-[0.2em] uppercase">{feature.subtitle}</span>
+                <div className="flex items-center gap-4">
+                  <span className="text-[#D4AF37] font-mono text-xl opacity-60">0{feature.id}</span>
+                  <div className="h-[1px] w-16 bg-[#D4AF37]/50" />
+                  <span className="text-[#D4AF37] text-xs tracking-[0.3em] uppercase font-medium">{feature.subtitle}</span>
                 </div>
-                <h3 className="text-3xl md:text-4xl font-header text-white leading-tight">{feature.title}</h3>
-                <p className="text-gray-400 font-body leading-relaxed text-lg">{feature.description}</p>
-                <div className="pt-4">
+                
+                <h3 className="text-3xl md:text-5xl font-bold text-white leading-tight">
+                  {feature.title}
+                </h3>
+                
+                <p className="text-gray-400 text-lg leading-loose font-light border-l-2 border-[#D4AF37]/20 pl-6">
+                  {feature.description}
+                </p>
+                
+                <div className="pt-6">
                   <GlowButton text={feature.btnText} />
                 </div>
               </motion.div>
               
-              {/* Video Player Container */}
+              {/* Enhanced Image Card */}
               <motion.div 
-                initial={{ opacity: 0, scale: 0.95 }} 
-                whileInView={{ opacity: 1, scale: 1 }} 
-                viewport={{ once: true }} 
-                className="flex-1 relative group w-full"
+                initial={{ opacity: 0, scale: 0.9, y: 30 }} 
+                whileInView={{ opacity: 1, scale: 1, y: 0 }} 
+                viewport={{ once: true, margin: "-15%" }}
+                transition={{ duration: 0.8, ease: "easeOut" }}
+                className="flex-1 w-full"
               >
-                {/* 3D Border Effect */}
-                <div className="absolute inset-0 bg-[#D4AF37] transform translate-x-2 translate-y-2 opacity-10 group-hover:translate-x-4 group-hover:translate-y-4 transition-transform duration-500" />
-                
-                {/* Video Wrapper */}
-                <div className="relative overflow-hidden aspect-[9/16] md:aspect-[4/5] bg-zinc-900/50 backdrop-blur-sm border border-white/5 rounded-sm">
-                  <div className="absolute inset-0 pointer-events-none scale-[1.1] md:scale-[1.4]">
-                     <ReactPlayer
-                        url={feature.videoUrl}
-                        playing={true}
-                        loop={true}
-                        muted={true}
-                        width="100%"
-                        height="100%"
-                        playsinline={true}
-                        config={{
-                          youtube: {
-                            playerVars: { 
-                              showinfo: 0, 
-                              controls: 0, 
-                              modestbranding: 1, 
-                              rel: 0, 
-                              autoplay: 1,
-                              mute: 1,
-                              iv_load_policy: 3
-                            }
-                          }
-                        }}
-                      />
+                <div className="relative group w-full aspect-[4/5] md:aspect-[3/4]">
+                  
+                  {/* Decorative Border Frame */}
+                  <div className="absolute -inset-4 border border-[#D4AF37]/10 rounded-sm scale-95 group-hover:scale-100 transition-transform duration-700 ease-out" />
+                  
+                  {/* Main Image Container */}
+                  <div className="relative h-full w-full overflow-hidden rounded-sm bg-zinc-900">
+                    <div className="absolute inset-0 bg-[#D4AF37]/20 mix-blend-overlay z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                    
+                    {/* The Image */}
+                    <motion.img 
+                      src={feature.image} 
+                      alt={feature.title}
+                      className="absolute inset-0 w-full h-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-110 grayscale-[30%] group-hover:grayscale-0"
+                    />
+                    
+                    {/* Inner Shadow/Vignette */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/20 z-10" />
+
+                    {/* Hover Reveal Text */}
+                    <div className="absolute bottom-8 left-8 z-20 translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 delay-100">
+                      <p className="text-white text-xs tracking-[0.2em] uppercase border-b border-[#D4AF37] pb-2 inline-block">
+                        View Details
+                      </p>
+                    </div>
                   </div>
-                  
-                  {/* Premium Overlays */}
-                  <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors duration-700" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-60" />
-                  
-                  {/* Grayscale to Color Transition */}
-                  <div className="absolute inset-0 grayscale group-hover:grayscale-0 transition-all duration-1000 mix-blend-saturation" />
+
+                  {/* Floating Accent Element */}
+                  <div className="absolute -bottom-6 -right-6 w-24 h-24 bg-[#D4AF37]/5 backdrop-blur-md border border-[#D4AF37]/20 rounded-full hidden md:block group-hover:scale-110 transition-transform duration-500" />
                 </div>
               </motion.div>
+
             </div>
           ))}
         </div>
