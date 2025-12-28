@@ -10,9 +10,10 @@ const Preloader: React.FC<PreloaderProps> = ({ onComplete }) => {
 
   useEffect(() => {
     // ----------------------------------------------------
-    // UPDATED: Set to 6000ms (6 seconds) to match your video
+    // UPDATED: Set to 8000ms (8 seconds)
+    // 6 seconds video + 2 seconds buffer for smooth loading
     // ----------------------------------------------------
-    const VIDEO_DURATION = 6000;
+    const VIDEO_DURATION = 8000;
 
     const timer = setTimeout(() => {
       setIsExiting(true);
