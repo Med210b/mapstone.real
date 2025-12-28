@@ -12,6 +12,19 @@
     "deploy": "gh-pages -d dist"
   },
   "dependencies": {
-    "react-player": "^3.4.0"
+    "clsx": "^2.1.1",
+    "framer-motion": "^12.23.26",
+    "jspdf": "^3.0.4",
+    "jspdf-autotable": "^5.0.2",
+    "lucide-react": "^0.562.0",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3",
+    "react-player": "^3.4.0",
+    "react-router-dom": "^7.11.0",
+    "tailwind-merge": "^3.4.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^5.1.2",
+    "vite": "^7.3.0"
   }
 }
