@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 
 interface PreloaderProps {
@@ -26,11 +26,11 @@ const Preloader: React.FC<PreloaderProps> = ({ onComplete }) => {
         muted
         playsInline
         onEnded={handleComplete}
-        onError={handleComplete} // SKIPS PRELOADER IF VIDEO FAILS
+        onError={handleComplete} // Skips if video fails to load
         className="w-full h-full object-cover"
       >
-        {/* Use process.env.PUBLIC_URL or a relative path for GitHub Pages compatibility */}
-        <source src="./preloader.mp4" type="video/mp4" />
+        {/* FIX: Removed the dot. Now points to root public folder */}
+        <source src="/preloader.mp4" type="video/mp4" />
         Your browser does not support the video tag.
       </video>
     </motion.div>
