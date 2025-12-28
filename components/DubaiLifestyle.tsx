@@ -79,12 +79,12 @@ const DubaiLifestyle: React.FC = () => {
                 <div className="absolute inset-0 pointer-events-none scale-[1.2] md:scale-[1.5]">
                    <ReactPlayer
                     url={feature.videoUrl}
-                    playing
-                    loop
-                    muted
+                    playing={true}
+                    loop={true}
+                    muted={true}
                     width="100%"
                     height="100%"
-                    config={{ youtube: { playerVars: { showinfo: 0, controls: 0, modestbranding: 1, rel: 0 } } }}
+                    config={{ youtube: { playerVars: { showinfo: 0, controls: 0, modestbranding: 1, rel: 0, autoplay: 1 } } }}
                   />
                 </div>
                 <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors duration-700" />
