@@ -4,6 +4,7 @@ import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import BackgroundEffect from './components/BackgroundEffect';
 import { LanguageProvider } from './components/LanguageContext';
+import { VideoProvider } from './components/VideoContext';
 
 // Components
 import Hero from './components/Hero';
@@ -37,32 +38,34 @@ const Home = () => (
 
 function App() {
   return (
-    <LanguageProvider>
-      <Router>
-        <div className="bg-black font-sans selection:bg-[#D4AF37] selection:text-black overflow-x-hidden relative w-full min-h-screen flex flex-col">
-          <Navbar />
-          
-          {/* Safety Background */}
-          <div className="fixed inset-0 z-0 pointer-events-none">
-            <BackgroundEffect color="#D4AF37" opacity={0.05} />
+    <VideoProvider>
+      <LanguageProvider>
+        <Router>
+          <div className="bg-black font-sans selection:bg-[#D4AF37] selection:text-black overflow-x-hidden relative w-full min-h-screen flex flex-col">
+            <Navbar />
+            
+            {/* Ambient Background Glow */}
+            <div className="fixed inset-0 z-0 pointer-events-none">
+              <BackgroundEffect color="#D4AF37" opacity={0.05} />
+            </div>
+
+            <main className="relative z-10 flex-grow">
+              <Suspense fallback={<div className="h-screen bg-black flex items-center justify-center text-[#D4AF37]">Loading...</div>}>
+                <Routes>
+                  <Route path="/" element={<Home />} />
+                  <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+                  <Route path="/terms-conditions" element={<TermsConditions />} />
+                  <Route path="/faq" element={<FAQ />} />
+                  <Route path="*" element={<Home />} />
+                </Routes>
+              </Suspense>
+            </main>
+
+            <Footer />
           </div>
-
-          <main className="relative z-10 flex-grow">
-            <Suspense fallback={<div className="h-screen bg-black flex items-center justify-center text-[#D4AF37]">Loading...</div>}>
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-                <Route path="/terms-conditions" element={<TermsConditions />} />
-                <Route path="/faq" element={<FAQ />} />
-                <Route path="*" element={<Home />} />
-              </Routes>
-            </Suspense>
-          </main>
-
-          <Footer />
-        </div>
-      </Router>
-    </LanguageProvider>
+        </Router>
+      </LanguageProvider>
+    </VideoProvider>
   );
 }
 
