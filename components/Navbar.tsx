@@ -76,8 +76,9 @@ const Navbar: React.FC = () => {
                   {item.label}
                 </motion.button>
               ))}
+              {/* FIXED: Removed broken translation code, now says "Inquiry" directly */}
               <motion.a href="https://wa.me/971585928787" target="_blank" rel="noopener noreferrer" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }} className="mt-4 px-10 py-4 border border-[#D4AF37] text-[#D4AF37] font-subtitle uppercase text-xs tracking-[0.3em]">
-                {t?.nav?.book || "Book Briefing"}
+                Inquiry
               </motion.a>
             </div>
             <button onClick={() => setIsOpen(false)} className="absolute top-6 right-6 text-[#D4AF37] p-2"><X size={28} /></button>
