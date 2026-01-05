@@ -1,33 +1,22 @@
-/* --- HIDE GOOGLE TRANSLATE BANNER & UI --- */
+/* --- GOOGLE TRANSLATE OVERRIDES --- */
 .goog-te-banner-frame {
     display: none !important;
 }
-
-.goog-tooltip {
+iframe.goog-te-banner-frame {
     display: none !important;
+    visibility: hidden !important;
+    height: 0 !important;
+    width: 0 !important;
 }
-
-.goog-tooltip:hover {
-    display: none !important;
-}
-
-.goog-text-highlight {
-    background-color: transparent !important;
-    box-shadow: none !important;
-}
-
-/* Fix body shifting caused by Google */
-body {
-    top: 0px !important;
-    position: static !important; 
-}
-
-/* Hide the element container just in case */
 #google_translate_element {
     display: none !important;
 }
+body {
+    top: 0px !important;
+    position: static !important;
+}
 
-/* --- TAILWIND DIRECTIVES --- */
+/* --- TAILWIND & SITE STYLES --- */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -44,13 +33,12 @@ html, body {
   width: 100%;
   overflow-x: hidden;
   font-family: 'Times New Roman', serif;
-  /* Standard mobile readability */
   font-size: 16px;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
 }
 
-/* Fluid Typography for Luxury Mobile-First design */
+/* Fluid Typography */
 h1 { font-size: clamp(2.2rem, 8vw, 5rem); line-height: 1.1; }
 h2 { font-size: clamp(1.8rem, 6vw, 3.5rem); line-height: 1.2; }
 h3 { font-size: clamp(1.4rem, 4vw, 2.2rem); }
@@ -73,7 +61,6 @@ section {
     padding-left: 1.2rem;
     padding-right: 1.2rem;
   }
-  
   p {
     font-size: 0.95rem;
     line-height: 1.6;
