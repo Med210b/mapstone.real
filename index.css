@@ -1,10 +1,33 @@
-/* Hide the Google Translate Top Bar */
+/* --- HIDE GOOGLE TRANSLATE BANNER & UI --- */
 .goog-te-banner-frame {
     display: none !important;
 }
+
+.goog-tooltip {
+    display: none !important;
+}
+
+.goog-tooltip:hover {
+    display: none !important;
+}
+
+.goog-text-highlight {
+    background-color: transparent !important;
+    box-shadow: none !important;
+}
+
+/* Fix body shifting caused by Google */
 body {
     top: 0px !important;
+    position: static !important; 
 }
+
+/* Hide the element container just in case */
+#google_translate_element {
+    display: none !important;
+}
+
+/* --- TAILWIND DIRECTIVES --- */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
