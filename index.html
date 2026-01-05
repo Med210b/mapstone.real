@@ -18,37 +18,9 @@
     <meta name="twitter:image" content="https://i.postimg.cc/sB5TRn6Y/homer.png" />
 
     <style>
-      /* Hide the specific Google banner frame */
-      .goog-te-banner-frame.skiptranslate {
-          display: none !important;
-      }
-      
-      /* Hide the iframe if Google tries to inject it that way */
-      iframe.goog-te-banner-frame {
-          display: none !important;
-          visibility: hidden !important;
-          height: 0 !important;
-          width: 0 !important;
-      }
-
-      /* Force the body back to the top (Prevent the white gap) */
-      body {
-          top: 0px !important;
-          position: static !important;
-          margin-top: 0px !important;
-      }
-
-      /* Hide tooltips and highlights */
-      .goog-tooltip {
-          display: none !important;
-      }
-      .goog-tooltip:hover {
-          display: none !important;
-      }
-      .goog-text-highlight {
-          background-color: transparent !important;
-          box-shadow: none !important;
-      }
+      .goog-te-banner-frame { display: none !important; }
+      .goog-tooltip { display: none !important; }
+      body { top: 0px !important; margin-top: 0px !important; }
     </style>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -89,10 +61,31 @@
       }
     }
     </script>
-    <script type="module" crossorigin src="/assets/index-CygICL3w.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-D8-9QuYi.css">
+    <script type="module" crossorigin src="/assets/index-BpRrMAL0.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-DHceDTgW.css">
   </head>
   <body>
     <div id="root"></div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+          // Check every 100ms and force the body to the top
+          setInterval(function() {
+              var iframes = document.querySelectorAll("iframe");
+              iframes.forEach(function(iframe) {
+                  // Google's banner often has these specific IDs or classes
+                  if (iframe.id.includes("goog") || iframe.className.includes("goog")) {
+                      iframe.style.display = "none";
+                  }
+              });
+              
+              // Force body back to top
+              if (document.body.style.top !== "0px") {
+                  document.body.style.top = "0px";
+                  document.body.style.marginTop = "0px";
+              }
+          }, 100);
+      });
+    </script>
   </body>
 </html>
