@@ -18,9 +18,18 @@
     <meta name="twitter:image" content="https://i.postimg.cc/sB5TRn6Y/homer.png" />
 
     <style>
+      /* Force hide any google elements that might slip through */
       .goog-te-banner-frame { display: none !important; }
       .goog-tooltip { display: none !important; }
-      body { top: 0px !important; margin-top: 0px !important; }
+      .goog-te-balloon-frame { display: none !important; }
+      iframe[id*=":1.container"] { display: none !important; }
+      
+      /* Force body to stay at top */
+      body { 
+          top: 0px !important; 
+          margin-top: 0px !important; 
+          position: static !important; 
+      }
     </style>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -66,25 +75,36 @@
     <div id="root"></div>
     <script type="module" src="index.tsx"></script>
 
-    <script>
-      document.addEventListener("DOMContentLoaded", function() {
-          // Check every 100ms and force the body to the top
-          setInterval(function() {
-              var iframes = document.querySelectorAll("iframe");
-              iframes.forEach(function(iframe) {
-                  // Google's banner often has these specific IDs or classes
-                  if (iframe.id.includes("goog") || iframe.className.includes("goog")) {
-                      iframe.style.display = "none";
-                  }
-              });
-              
-              // Force body back to top
-              if (document.body.style.top !== "0px") {
-                  document.body.style.top = "0px";
-                  document.body.style.marginTop = "0px";
-              }
-          }, 100);
+    <script type="text/javascript">
+      // This script watches the page for changes and DELETES the banner instantly
+      const observer = new MutationObserver((mutations) => {
+        
+        // 1. Target the Google Banner Frame
+        const banner = document.querySelector('.goog-te-banner-frame');
+        const iframes = document.querySelectorAll('iframe');
+        
+        // Delete banner if found
+        if (banner) {
+          banner.remove();
+        }
+
+        // Delete any iframe that belongs to Google
+        iframes.forEach((iframe) => {
+          if (iframe.id.includes('goog') || iframe.classList.contains('goog-te-banner-frame')) {
+            iframe.remove();
+          }
+        });
+
+        // 2. Force Body back to the top (Fixing the gap)
+        if (document.body.style.top !== '0px' || document.body.style.marginTop !== '0px') {
+            document.body.style.setProperty('top', '0px', 'important');
+            document.body.style.setProperty('margin-top', '0px', 'important');
+            document.body.style.setProperty('position', 'static', 'important');
+        }
       });
+
+      // Start watching the body immediately
+      observer.observe(document.body, { attributes: true, childList: true, subtree: true });
     </script>
   </body>
 </html>
