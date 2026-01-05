@@ -18,22 +18,27 @@
     <meta name="twitter:image" content="https://i.postimg.cc/sB5TRn6Y/homer.png" />
 
     <style>
-      /* Hide the Google Banner Frame immediately */
+      /* Hide the specific Google banner frame */
       .goog-te-banner-frame.skiptranslate {
           display: none !important;
       }
+      
+      /* Hide the iframe if Google tries to inject it that way */
       iframe.goog-te-banner-frame {
           display: none !important;
           visibility: hidden !important;
           height: 0 !important;
+          width: 0 !important;
       }
-      /* Force body to top (Overriding Google's push) */
+
+      /* Force the body back to the top (Prevent the white gap) */
       body {
           top: 0px !important;
           position: static !important;
           margin-top: 0px !important;
       }
-      /* Hide tooltips */
+
+      /* Hide tooltips and highlights */
       .goog-tooltip {
           display: none !important;
       }

@@ -16,7 +16,7 @@ body {
     position: static !important;
 }
 
-/* --- TAILWIND & SITE STYLES --- */
+/* --- TAILWIND DIRECTIVES --- */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
