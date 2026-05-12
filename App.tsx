@@ -3,7 +3,6 @@ import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import { LanguageProvider } from './components/LanguageContext';
-import Preloader from './components/Preloader';
 
 // Components
 import Hero from './components/Hero';
@@ -20,6 +19,7 @@ import Contact from './components/Contact';
 import PrivacyPolicy from './components/PrivacyPolicy';
 import TermsConditions from './components/TermsConditions';
 import FAQ from './components/FAQ';
+import Preloader from './Preloader';
 
 const GoldBorder = () => <div className="h-px w-full bg-[#D4AF37]/40 shadow-[0_0_10px_rgba(212,175,55,0.2)]" />;
 
